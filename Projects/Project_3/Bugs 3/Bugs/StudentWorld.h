@@ -39,6 +39,9 @@ public:
     
     // Accessors
     
+    
+    
+    
 
 private:
     int m_tks; // Number of ticks, maximum is 2000

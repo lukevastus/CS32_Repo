@@ -6,17 +6,47 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
-void Insect::bite(Actor &other)
+bool Insect::attemptAct()
 {
+    loseHP(1);
     
+    if (Actor::isDead())
+    {
+        dropFood();
+        return false;
+    }
+    
+    if (sleepCounter() > 0)
+    {
+        setSleep(sleepCounter() - 1);
+        return false;
+    }
+    
+    return true;
 }
 
-void Insect::eat()
+//void Insect::bite()
+
+//void Insect::eat()
+
+void Insect::dropFood()
 {
+    StudentWorld* world = Actor::getWorld();
     
 }
 
 void Insect::move()
 {
     
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Baby grasshopper class
+void BabyGrasshopper::doSomething()
+{
+    if (Insect::attemptAct())
+    {
+    
+    }
 }

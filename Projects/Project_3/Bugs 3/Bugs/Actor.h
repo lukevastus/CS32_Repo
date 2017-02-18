@@ -6,6 +6,7 @@
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constants
 
@@ -21,8 +22,28 @@ const int DEAD = 1;
 const int SLEEPING = 2;
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+GraphObject::Direction randDir()
+{
+    int dir = randInt(1, 4);
+    switch (dir)
+    {
+        case 1:
+            return GraphObject::up;
+        case 2:
+            return GraphObject::right;
+        case 3:
+            return GraphObject::down;
+        case 4:
+            return GraphObject::left;
+    }
+    return GraphObject::none;
+}
 
 class StudentWorld;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Actor class
@@ -42,25 +63,6 @@ public:
     
     }
     
-    // Mutators
-    void loseHP(int num)
-    {
-        m_hp = m_hp - num;
-    }
-    
-    void doSomething()
-    {
-        if (!hasImmunity(AGE_IMMUNE))
-            loseHP(1);
-        
-        if (isDead())
-            return;
-        
-        takeAction();
-    }
-    
-    virtual void takeAction() = 0;
-    
     // Accessors
     int getHP() const
     {
@@ -76,6 +78,19 @@ public:
     {
         return (m_hp == 0);
     }
+    
+    StudentWorld* getWorld() const
+    {
+        return m_world;
+    }
+    
+    // Mutators
+    void loseHP(int num)
+    {
+        m_hp = m_hp - num;
+    }
+    
+    virtual void doSomething() = 0;
     
 private:
     int m_hp;
@@ -100,6 +115,7 @@ public:
     }
 };
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 class Insect: public Actor
@@ -112,7 +128,7 @@ public:
     
     virtual ~Insect()
     {
-        dropFood();
+        
     }
     
     // Accessors
@@ -132,9 +148,19 @@ public:
     }
     
     // Mutators
-    void bite(Actor &other);
     
-    void eat();
+    bool attemptAct();
+    
+    void age()
+    {
+        Actor::loseHP(1);
+    }
+    
+    void dropFood();
+    
+    // void bite(Actor &other);
+    
+    // void eat();
     
     void move();
     
@@ -149,8 +175,26 @@ private:
     int m_hunger;
     int m_drop;
     
-    void dropFood();
+};
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Baby grasshopper class
+class BabyGrasshopper: public Insect
+{
+public:
+    BabyGrasshopper(int startX, int startY, Direction startDirection, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, randDir(), 500, 0, 200, 100, false, false, world)
+    {
+        
+    }
+    
+    virtual ~BabyGrasshopper()
+    {
+    
+    }
+    
+    virtual void doSomething();
+
+    // void mature();
 };
 #endif // ACTOR_H_
