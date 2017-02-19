@@ -20,7 +20,7 @@ class StudentWorld : public GameWorld
 {
 public:
 	StudentWorld(std::string assetDir)
-	 : GameWorld(assetDir), m_tks(2000)
+	 : GameWorld(assetDir)
     {
 	}
 
@@ -33,7 +33,7 @@ public:
     virtual ~StudentWorld();
     
     // Accessors
-    
+    bool isBlocked(int x, int y) const;
     
     // Mutators
     void addActor(int x, int y, Actor* actor)
@@ -41,8 +41,7 @@ public:
         m_actors[x][y].push_back(actor);
     }
     
-    
-
+    void moveActor(int oldX, int oldY, int newX, int newY, Actor* actor);
     
 private:
     int m_tks; // Number of ticks, maximum is 2000
@@ -51,6 +50,7 @@ private:
     void parseField(); // Reads the field file and place the actors
     void formatText(); // Arranges the text in given format
     void setDisplayText();
+    void resetField();
 };
 
 #endif // STUDENTWORLD_H_

@@ -3,6 +3,7 @@
 
 #include "GameConstants.h"
 #include "GraphObject.h"
+#include <iostream>
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
@@ -34,12 +35,9 @@ class StudentWorld;
 class Actor: public GraphObject
 {
 public:
-    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool ageI, bool biteI, bool poiI, bool stunI, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, 0.3, depth), m_hp(hp), m_world(world)
+    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, 0.3, depth), m_hp(hp), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true)
     {
-        m_Immunities[0] = ageI;
-        m_Immunities[1] = biteI;
-        m_Immunities[2] = poiI;
-        m_Immunities[3] = stunI;
+      
     }
     
     virtual ~Actor()
@@ -53,14 +51,24 @@ public:
         return m_hp;
     }
     
-    bool hasImmunity(int immuneType) const
+    bool isBlockage() const
     {
-        return m_Immunities[immuneType];
+        return m_blockage;
+    }
+    
+    bool isImmobile() const
+    {
+        return m_immobile;
     }
     
     bool isDead() const
     {
         return (m_hp == 0);
+    }
+    
+    bool isActive() const
+    {
+        return m_active;
     }
     
     StudentWorld* getWorld() const
@@ -74,11 +82,25 @@ public:
         m_hp = m_hp - num;
     }
     
+    void activate()
+    {
+        if (!m_immobile)
+            m_active = true;
+    }
+    
+    void deactivate()
+    {
+        if (!m_immobile)
+            m_active = false;
+    }
+    
     virtual void doSomething() = 0;
     
 private:
     int m_hp;
-    bool m_Immunities[4];
+    bool m_blockage;
+    bool m_immobile;
+    bool m_active;
     StudentWorld* m_world;
 };
 
@@ -89,7 +111,7 @@ private:
 class Pebble: public Actor
 {
 public:
-    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, 1, true, true, true, true, world)
+    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, 1, true, true, world)
     {
         
     }
@@ -101,7 +123,7 @@ public:
     
     virtual void doSomething()
     {
-        
+        // std::cout << "DUDE wtf can i do i am a stone you piece of shit" << std::endl;
     }
 };
 
@@ -112,24 +134,9 @@ public:
 class Insect: public Actor
 {
 public:
-    Insect(int ImageID, int startX, int startY, int hp, int damage, int hunger, int drop, bool poiI, bool stunI, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, hp, false, false, poiI, stunI, world), m_sleepCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
+    Insect(int ImageID, int startX, int startY, int hp, int damage, int hunger, int drop, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, hp, false, false, world), m_sleepCounter(0), m_walkCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
     {
-        int dir = randInt(1, 4);
-        switch (dir)
-        {
-            case 1:
-                setDirection(up);
-                break;
-            case 2:
-                setDirection(right);
-                break;
-            case 3:
-                setDirection(down);
-                break;
-            case 4:
-                setDirection(left);
-                break;
-        }
+        newDir();
     }
     
     virtual ~Insect()
@@ -153,16 +160,20 @@ public:
         return m_hunger;
     }
     
-    // Mutators
-
-    void age()
+    int getWalkCounter() const
     {
-        loseHP(1);
+        return m_walkCounter;
     }
     
+    // Mutators
     void setSleep(int count)
     {
         m_sleepCounter = count;
+    }
+    
+    void setWalkCounter(int num)
+    {
+        m_walkCounter = num;
     }
     
     bool attemptAct();
@@ -171,12 +182,17 @@ public:
     
     // void bite(Actor &other);
     
-    // void eat();
+    bool eat();
     
     void move();
     
+    void newDir();
+    
+    virtual void doSomething() = 0;
+    
 private:
     int m_sleepCounter;
+    int m_walkCounter;
     int m_damage;
     int m_hunger;
     int m_drop;
@@ -190,7 +206,7 @@ private:
 class BabyGrasshopper: public Insect
 {
 public:
-    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, 500, 0, 200, 100, false, false, world)
+    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, 500, 0, 200, 100, world)
     {
     
     }
@@ -201,7 +217,8 @@ public:
     }
     
     virtual void doSomething();
-
+    
+    virtual bool doGrasshopperThings();
     // void mature();
 };
 
