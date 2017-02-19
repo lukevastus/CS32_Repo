@@ -35,7 +35,7 @@ class StudentWorld;
 class Actor: public GraphObject
 {
 public:
-    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, 0.3, depth), m_hp(hp), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true)
+    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_hp(hp), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true)
     {
       
     }
@@ -219,6 +219,7 @@ public:
     virtual void doSomething();
     
     virtual bool doGrasshopperThings();
+    
     // void mature();
 };
 

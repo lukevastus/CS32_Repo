@@ -47,8 +47,8 @@ private:
     int m_tks; // Number of ticks, maximum is 2000
     std::vector<Actor*> m_actors[VIEW_WIDTH][VIEW_HEIGHT];
     
-    void parseField(); // Reads the field file and place the actors
-    void formatText(); // Arranges the text in given format
+    void parseField();
+    void formatText(); 
     void setDisplayText();
     void resetField();
 };

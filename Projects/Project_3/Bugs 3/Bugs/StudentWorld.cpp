@@ -21,6 +21,7 @@ StudentWorld::~StudentWorld()
     cleanUp();
 }
 
+// Initializes the map, set ticks to 0
 int StudentWorld::init()
 {
     parseField();
@@ -28,10 +29,11 @@ int StudentWorld::init()
     return GWSTATUS_CONTINUE_GAME;
 }
 
+// This code is here merely to allow the game to build, run, and terminate after you hit enter.
+// Notice that the return value GWSTATUS_NO_WINNER will cause our framework to end the simulation.
+// Every actor is deactivated after moving, making it unable to be moved again this tick.
 int StudentWorld::move()
 {
-    // This code is here merely to allow the game to build, run, and terminate after you hit enter.
-    // Notice that the return value GWSTATUS_NO_WINNER will cause our framework to end the simulation.
     m_tks++;
     
     for (int x = 0; x < 64; x++)
@@ -63,6 +65,7 @@ int StudentWorld::move()
     //return GWSTATUS_NO_WINNER;
 }
 
+// Removes all dynamicly allocated memory after the simulation is over
 void StudentWorld::cleanUp()
 {
     for (int x = 0; x < 64; x++)
@@ -78,6 +81,24 @@ void StudentWorld::cleanUp()
             }
         }
     }
+}
+
+void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor)
+{
+    vector<Actor*>::iterator it = m_actors[oldX][oldY].begin();
+    while (it != m_actors[oldX][oldY].end())
+    {
+        if (*it == actor)
+            break;
+        it++;
+    }
+    
+    if (it == m_actors[oldX][oldY].end())
+        return;
+    
+    Actor* newActor = *it;
+    *it = nullptr;
+    m_actors[newX][newY].push_back(newActor);
 }
 
 void StudentWorld::parseField()
@@ -147,21 +168,7 @@ void StudentWorld::setDisplayText()
     setGameStatText(s);
 }
 
-void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor)
-{
-    vector<Actor*>::iterator it = m_actors[oldX][oldY].begin();
-    while (it != m_actors[oldX][oldY].end())
-    {
-        if (*it == actor)
-            break;
-        it++;
-    }
-    
-    Actor* newActor = *it;
-    *it = nullptr;
-    m_actors[newX][newY].push_back(newActor);
-}
-
+// Cleans up dead actors and reactivates all inactive (moved) actors
 void StudentWorld::resetField()
 {
     for (int x = 0; x < 64; x++)
