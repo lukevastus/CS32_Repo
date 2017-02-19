@@ -44,12 +44,12 @@ void StudentWorld::cleanUp()
     {
         for (int y = 0; y < 64; y++)
         {
-            if (!m_actors[x][y].empty())
+            std::vector<Actor*>::iterator it = m_actors[x][y].begin();
+            while (it != m_actors[x][y].end())
             {
-                std::vector<Actor*>::iterator it = m_actors[x][y].begin();
                 if (*it != nullptr)
                     delete *it;
-                m_actors[x][y].erase(it++);
+                it = m_actors[x][y].erase(it);
             }
         }
     }
@@ -59,12 +59,12 @@ void StudentWorld::parseField()
 {
     Field f;
     string filename = getFieldFilename();
-    cout << filename << endl;
+    // cout << filename << endl;
     Field::LoadResult loaded = f.loadField(filename);
     if (loaded == Field::load_fail_bad_format || loaded == Field::load_fail_file_not_found)
         return;
     
-    cout << "LOADED FIELD" << endl;
+    // cout << "LOADED FIELD" << endl;
     for (int x = 0; x < 64; x++)
     {
         for (int y = 0; y < 64; y++)
