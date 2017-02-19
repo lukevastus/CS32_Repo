@@ -25,32 +25,16 @@ const int SLEEPING = 2;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utilities
 
-GraphObject::Direction randDir()
-{
-    int dir = randInt(1, 4);
-    switch (dir)
-    {
-        case 1:
-            return GraphObject::up;
-        case 2:
-            return GraphObject::right;
-        case 3:
-            return GraphObject::down;
-        case 4:
-            return GraphObject::left;
-    }
-    return GraphObject::none;
-}
-
 class StudentWorld;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Actor class
+
 class Actor: public GraphObject
 {
 public:
-    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool ageI, bool biteI, bool poiI, bool stunI, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, 1.0, depth), m_hp(hp), m_world(world)
+    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool ageI, bool biteI, bool poiI, bool stunI, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, 0.3, depth), m_hp(hp), m_world(world)
     {
         m_Immunities[0] = ageI;
         m_Immunities[1] = biteI;
@@ -101,6 +85,7 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Pebble class
+
 class Pebble: public Actor
 {
 public:
@@ -113,17 +98,38 @@ public:
     {
     
     }
+    
+    virtual void doSomething()
+    {
+        
+    }
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
+
 class Insect: public Actor
 {
 public:
-    Insect(int ImageID, int startX, int startY, Direction startDirection, int hp, int damage, int hunger, int drop, bool poiI, bool stunI, StudentWorld* world): Actor(ImageID, startX, startY, startDirection, 1, hp, false, false, poiI, stunI, world), m_sleepCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
+    Insect(int ImageID, int startX, int startY, int hp, int damage, int hunger, int drop, bool poiI, bool stunI, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, hp, false, false, poiI, stunI, world), m_sleepCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
     {
-        
+        int dir = randInt(1, 4);
+        switch (dir)
+        {
+            case 1:
+                setDirection(up);
+                break;
+            case 2:
+                setDirection(right);
+                break;
+            case 3:
+                setDirection(down);
+                break;
+            case 4:
+                setDirection(left);
+                break;
+        }
     }
     
     virtual ~Insect()
@@ -148,14 +154,19 @@ public:
     }
     
     // Mutators
-    
-    bool attemptAct();
-    
+
     void age()
     {
-        Actor::loseHP(1);
+        loseHP(1);
     }
     
+    void setSleep(int count)
+    {
+        m_sleepCounter = count;
+    }
+    
+    bool attemptAct();
+
     void dropFood();
     
     // void bite(Actor &other);
@@ -163,11 +174,6 @@ public:
     // void eat();
     
     void move();
-    
-    void setSleep(int count)
-    {
-        m_sleepCounter = count;
-    }
     
 private:
     int m_sleepCounter;
@@ -180,12 +186,13 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Baby grasshopper class
+
 class BabyGrasshopper: public Insect
 {
 public:
-    BabyGrasshopper(int startX, int startY, Direction startDirection, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, randDir(), 500, 0, 200, 100, false, false, world)
+    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, 500, 0, 200, 100, false, false, world)
     {
-        
+    
     }
     
     virtual ~BabyGrasshopper()
@@ -197,4 +204,5 @@ public:
 
     // void mature();
 };
+
 #endif // ACTOR_H_

@@ -61,6 +61,16 @@
             ReferencedContainer = "container:Bugs.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_3/Bugs 3/field.txt"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/runjiali/Library/Developer/Xcode/DerivedData/Bugs-gvwyscfmcackavfjhdxecqwvwftq/Build/Products/Debug/field.txt"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

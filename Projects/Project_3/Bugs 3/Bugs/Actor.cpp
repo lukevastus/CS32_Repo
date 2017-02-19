@@ -3,6 +3,7 @@
 
 // Students:  Add code to this file (if you wish), Actor.h, StudentWorld.h, and StudentWorld.cpp
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
@@ -10,7 +11,7 @@ bool Insect::attemptAct()
 {
     loseHP(1);
     
-    if (Actor::isDead())
+    if (isDead())
     {
         dropFood();
         return false;
@@ -31,12 +32,13 @@ bool Insect::attemptAct()
 
 void Insect::dropFood()
 {
-    StudentWorld* world = Actor::getWorld();
+    StudentWorld* world = getWorld();
     
 }
 
 void Insect::move()
 {
+    StudentWorld* world = getWorld();
     
 }
 
@@ -45,8 +47,11 @@ void Insect::move()
 // The Baby grasshopper class
 void BabyGrasshopper::doSomething()
 {
-    if (Insect::attemptAct())
+    bool canMove = attemptAct();
+    if (!canMove)
     {
-    
+        return;
     }
+    
+    
 }
