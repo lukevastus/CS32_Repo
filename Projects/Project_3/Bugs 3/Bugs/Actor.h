@@ -11,17 +11,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constants
 
-// Immunities;
-const int AGE_IMMUNE = 0;
-const int BITE_IMMUNE = 1;
-const int POISON_IMMUNE = 2;
-const int STUN_IMMUNE = 3;
-
-// Status
-const int ALIVE = 0;
-const int DEAD = 1;
-const int SLEEPING = 2;
-
+// TYPES OF ACTORS
+const int NOT_SPECIFIED = 0;
+const int ANT_HILL = 1;
+const int POISON = 2;
+const int FOOD = 3;
+const int WATER_POOL = 4;
+const int ROCK = 5;
+const int BABY_GH = 6;
+const int ADULT_GH = 7;
+const int PHEROMONE = 8;
+const int ANT = 9;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utilities
@@ -35,7 +35,7 @@ class StudentWorld;
 class Actor: public GraphObject
 {
 public:
-    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int hp, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_hp(hp), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true)
+    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int type, int hp, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_type(type), m_hp(hp), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true)
     {
       
     }
@@ -46,6 +46,11 @@ public:
     }
     
     // Accessors
+    int getType() const
+    {
+        return m_type;
+    }
+    
     int getHP() const
     {
         return m_hp;
@@ -63,7 +68,7 @@ public:
     
     bool isDead() const
     {
-        return (m_hp == 0);
+        return (m_hp <= 0);
     }
     
     bool isActive() const
@@ -77,6 +82,11 @@ public:
     }
     
     // Mutators
+    void gainHP(int num)
+    {
+        m_hp = m_hp + num;
+    }
+    
     void loseHP(int num)
     {
         m_hp = m_hp - num;
@@ -97,6 +107,7 @@ public:
     virtual void doSomething() = 0;
     
 private:
+    int m_type;
     int m_hp;
     bool m_blockage;
     bool m_immobile;
@@ -111,7 +122,7 @@ private:
 class Pebble: public Actor
 {
 public:
-    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, 1, true, true, world)
+    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, ROCK, 100, true, true, world)
     {
         
     }
@@ -129,12 +140,35 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Food class
+
+class Food: public Actor
+{
+public:
+    Food(int startX, int startY, int units, StudentWorld* world): Actor(IID_FOOD, startX, startY, right, 2, FOOD, units, false, true, world)
+    {
+        
+    }
+    
+    virtual ~Food()
+    {
+    
+    }
+    
+    virtual void doSomething()
+    {
+    
+    }
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
 class Insect: public Actor
 {
 public:
-    Insect(int ImageID, int startX, int startY, int hp, int damage, int hunger, int drop, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, hp, false, false, world), m_sleepCounter(0), m_walkCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
+    Insect(int ImageID, int startX, int startY, int type, int hp, int damage, int hunger, int drop, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, type, hp, false, false, world), m_sleepCounter(0), m_walkCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
     {
         newDir();
     }
@@ -206,7 +240,7 @@ private:
 class BabyGrasshopper: public Insect
 {
 public:
-    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, 500, 0, 200, 100, world)
+    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, BABY_GH, 500, 0, 200, 100, world)
     {
     
     }

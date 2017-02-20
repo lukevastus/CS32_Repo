@@ -36,25 +36,18 @@ int StudentWorld::move()
 {
     m_tks++;
     
-    for (int x = 0; x < 64; x++)
+    for (int x = 1; x < 63; x++)
     {
-        for (int y = 0; y < 64; y++)
+        for (int y = 1; y < 63; y++)
         {
-            std::vector<Actor*>::iterator it = m_actors[x][y].begin();
-            while (it != m_actors[x][y].end())
+            for (int i = 0; i < m_actors[x][y].size(); i++)
             {
-                if (*it != nullptr)
+                if (m_actors[x][y][i]->isActive())
                 {
-                    if ((*it)->isActive())
-                    {
-                        Actor* actor = *it;
-                        actor->doSomething();
-                        actor->deactivate();
-                    }
+                    m_actors[x][y][i]->doSomething();
+                    m_actors[x][y][i]->deactivate();
                 }
-                it++;
             }
-            
         }
     }
     
@@ -72,15 +65,24 @@ void StudentWorld::cleanUp()
     {
         for (int y = 0; y < 64; y++)
         {
-            std::vector<Actor*>::iterator it = m_actors[x][y].begin();
+            vector<Actor*>::iterator it = m_actors[x][y].begin();
             while (it != m_actors[x][y].end())
             {
-                if (*it != nullptr)
-                    delete *it;
+                delete *it;
                 it = m_actors[x][y].erase(it);
             }
         }
     }
+}
+
+bool StudentWorld::isBlocked(int x, int y) const
+{
+    if (!m_actors[x][y].empty())
+    {
+        Actor* actor = m_actors[x][y][0];
+        return actor->isBlockage();
+    }
+    return false;
 }
 
 void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor)
@@ -89,16 +91,33 @@ void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *acto
     while (it != m_actors[oldX][oldY].end())
     {
         if (*it == actor)
-            break;
+        {
+            Actor* newActor = *it;
+            m_actors[oldX][oldY].erase(it);
+            m_actors[newX][newY].push_back(newActor);
+            return;
+        }
+        it++;
+    }
+    return;
+}
+
+int StudentWorld::consumeFood(int x, int y, int amount)
+{
+    vector<Actor*>::iterator it = m_actors[x][y].begin();
+    while (it != m_actors[x][y].end())
+    {
+        if ((*it)->getType() == FOOD)
+        {
+            int units = (*it)->getHP();
+            int amountEaten = units > amount ? amount : units;
+            (*it)->loseHP(amountEaten);
+            return amountEaten;
+        }
         it++;
     }
     
-    if (it == m_actors[oldX][oldY].end())
-        return;
-    
-    Actor* newActor = *it;
-    *it = nullptr;
-    m_actors[newX][newY].push_back(newActor);
+    return 0;
 }
 
 void StudentWorld::parseField()
@@ -116,28 +135,36 @@ void StudentWorld::parseField()
         for (int y = 0; y < 64; y++)
         {
             Field::FieldItem item = f.getContentsOf(x, y);
-            Actor* actor = nullptr;
-            
+            Actor* actor;
+            bool hasItem = true;
             switch (item)
             {
                 case (Field::FieldItem::empty):
                     // cout << "emptyyyy" << endl;
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill0):
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill1):
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill2):
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill3):
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::food):
+                    actor = new Food(x, y, 6000, this);
+                    // hasItem = false;
                     break;
                 case (Field::FieldItem::water):
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::poison):
+                    hasItem = false;
                     break;
-                    
                 case (Field::FieldItem::rock):
                     actor = new Pebble(x, y, this);
                     break;
@@ -146,20 +173,10 @@ void StudentWorld::parseField()
                     break;
             }
             
-            addActor(x, y, actor);
+            if (hasItem)
+                addActor(x, y, actor);
         }
     }
-}
-
-bool StudentWorld::isBlocked(int x, int y) const
-{
-    if (!m_actors[x][y].empty())
-    {
-        Actor* actor = m_actors[x][y][0];
-        if (actor != nullptr)
-            return actor->isBlockage();
-    }
-    return false;
 }
 
 void StudentWorld::setDisplayText()
@@ -178,22 +195,17 @@ void StudentWorld::resetField()
             std::vector<Actor*>::iterator it = m_actors[x][y].begin();
             while (it != m_actors[x][y].end())
             {
-                if (*it != nullptr)
+                if ((*it)->isDead())
                 {
-                    if ((*it)->isDead())
-                    {
-                        delete *it;
-                        it = m_actors[x][y].erase(it);
-                    }
-                    
-                    else
-                    {
-                        (*it)->activate();
-                        it++;
-                    }
+                    delete *it;
+                    it = m_actors[x][y].erase(it);
                 }
+                    
                 else
+                {
+                    (*it)->activate();
                     it++;
+                }
             }
         }
     }

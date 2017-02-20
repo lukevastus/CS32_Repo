@@ -34,7 +34,7 @@ public:
     
     // Accessors
     bool isBlocked(int x, int y) const;
-    
+        
     // Mutators
     void addActor(int x, int y, Actor* actor)
     {
@@ -42,6 +42,8 @@ public:
     }
     
     void moveActor(int oldX, int oldY, int newX, int newY, Actor* actor);
+    
+    int consumeFood(int x, int y, int amount);
     
 private:
     int m_tks; // Number of ticks, maximum is 2000

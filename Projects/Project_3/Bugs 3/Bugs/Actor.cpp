@@ -39,7 +39,14 @@ void Insect::dropFood()
 
 bool Insect::eat()
 {
-    // StudentWorld* world = getWorld();
+    StudentWorld* world = getWorld();
+    int amountEaten = world->consumeFood(getX(), getY(), m_hunger);
+    if (amountEaten > 0)
+    {
+        gainHP(amountEaten);
+        return true;
+    }
+    
     return false;
 }
 
@@ -140,7 +147,7 @@ void BabyGrasshopper::doSomething()
 
 bool BabyGrasshopper::doGrasshopperThings()
 {
-    if (getHP() >= 1600)
+    /*if (getHP() >= 1600)
     {
         // mature();
         // Actor* adult = new Grasshopper:
@@ -149,7 +156,7 @@ bool BabyGrasshopper::doGrasshopperThings()
         loseHP(getHP());
         dropFood();
         return 0;
-    }
+    }*/
     
     return 1;
 }
