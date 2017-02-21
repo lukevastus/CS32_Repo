@@ -45,6 +45,8 @@ public:
     
     int consumeFood(int x, int y, int amount);
     
+    void stackFood(int x, int y, int amount);
+    
 private:
     int m_tks; // Number of ticks, maximum is 2000
     std::vector<Actor*> m_actors[VIEW_WIDTH][VIEW_HEIGHT];

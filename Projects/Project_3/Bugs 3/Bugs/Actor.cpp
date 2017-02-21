@@ -33,8 +33,8 @@ bool Insect::attemptAct()
 
 void Insect::dropFood()
 {
-    // StudentWorld* world = getWorld();
-    
+    StudentWorld* world = getWorld();
+    world->stackFood(getX(), getY(), m_drop);
 }
 
 bool Insect::eat()

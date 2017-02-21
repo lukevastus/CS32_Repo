@@ -120,6 +120,23 @@ int StudentWorld::consumeFood(int x, int y, int amount)
     return 0;
 }
 
+void StudentWorld::stackFood(int x, int y, int amount)
+{
+    vector<Actor*>::iterator it = m_actors[x][y].begin();
+    while (it != m_actors[x][y].end())
+    {
+        if ((*it)->getType() == FOOD)
+        {
+            (*it)->gainHP(amount);
+            return;
+        }
+        it++;
+    }
+    
+    Actor* food = new Food(x, y, amount, this);
+    addActor(x, y, food);
+}
+
 void StudentWorld::parseField()
 {
     Field f;
