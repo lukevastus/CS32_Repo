@@ -162,12 +162,7 @@ public:
     
     virtual void doSomething()
     {
-        // std::cout << "DUDE wtf can i do i am a stone you piece of shit" << std::endl;
-    }
-    
-    virtual void getStunned(int duration)
-    {
-        
+
     }
 };
 
