@@ -47,6 +47,10 @@ public:
     
     void stackFood(int x, int y, int amount);
     
+    void stunAOE(int x, int y, int duration);
+    
+    void damageAOE(int x, int y, int damage);
+    
 private:
     int m_tks; // Number of ticks, maximum is 2000
     std::vector<Actor*> m_actors[VIEW_WIDTH][VIEW_HEIGHT];

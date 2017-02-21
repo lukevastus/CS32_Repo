@@ -6,6 +6,41 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Actor class
+void Actor::loseHP(int num)
+{
+    m_hp = m_hp > num ? (m_hp - num) : 0;
+    if (isDead())
+        dropFood(100);
+}
+
+void Actor::dropFood(int amount)
+{
+    m_world->stackFood(getX(), getY(), amount);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Pool of Water class
+
+void PoolofWater::doSomething()
+{
+    StudentWorld* world = getWorld();
+    world->stunAOE(getX(), getY(), 2);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Poison class
+
+void Poison::doSomething()
+{
+    StudentWorld* world = getWorld();
+    world->damageAOE(getX(), getY(), 150);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
 bool Insect::attemptAct()
@@ -14,7 +49,6 @@ bool Insect::attemptAct()
     
     if (isDead())
     {
-        dropFood();
         return false;
     }
     
@@ -26,16 +60,11 @@ bool Insect::attemptAct()
         return false;
     }
     
+    getUnstunned();
     return true;
 }
 
 //void Insect::bite()
-
-void Insect::dropFood()
-{
-    StudentWorld* world = getWorld();
-    world->stackFood(getX(), getY(), m_drop);
-}
 
 bool Insect::eat()
 {
@@ -154,7 +183,6 @@ bool BabyGrasshopper::doGrasshopperThings()
         Actor* adult = nullptr;
         getWorld()->addActor(getX(), getY(), adult);
         loseHP(getHP());
-        dropFood();
         return 0;
     }*/
     

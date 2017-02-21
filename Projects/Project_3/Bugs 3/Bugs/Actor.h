@@ -35,7 +35,7 @@ class StudentWorld;
 class Actor: public GraphObject
 {
 public:
-    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int type, int hp, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_type(type), m_hp(hp), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true)
+    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int type, int hp, int drop, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_type(type), m_hp(hp), m_drop(drop), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true), m_stunned(false), m_sleepCounter(0)
     {
       
     }
@@ -54,6 +54,11 @@ public:
     int getHP() const
     {
         return m_hp;
+    }
+    
+    int sleepCounter() const
+    {
+        return m_sleepCounter;
     }
     
     bool isBlockage() const
@@ -76,6 +81,11 @@ public:
         return m_active;
     }
     
+    bool isStunned() const
+    {
+        return m_stunned;
+    }
+    
     StudentWorld* getWorld() const
     {
         return m_world;
@@ -85,11 +95,6 @@ public:
     void gainHP(int num)
     {
         m_hp = m_hp + num;
-    }
-    
-    void loseHP(int num)
-    {
-        m_hp = m_hp - num;
     }
     
     void activate()
@@ -104,14 +109,37 @@ public:
             m_active = false;
     }
     
+    void getStunned(int duration)
+    {
+        m_stunned = true;
+        setSleep(m_sleepCounter + duration);
+    }
+    
+    void getUnstunned()
+    {
+        m_stunned = false;
+    }
+    
+    void setSleep(int count)
+    {
+        m_sleepCounter = count;
+    }
+    
+    void loseHP(int num);
+
+    void dropFood(int amount);
+
     virtual void doSomething() = 0;
     
 private:
     int m_type;
     int m_hp;
+    int m_sleepCounter;
+    int m_drop;
     bool m_blockage;
     bool m_immobile;
     bool m_active;
+    bool m_stunned;
     StudentWorld* m_world;
 };
 
@@ -122,7 +150,7 @@ private:
 class Pebble: public Actor
 {
 public:
-    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, ROCK, 100, true, true, world)
+    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, ROCK, 100, 100, true, true, world)
     {
         
     }
@@ -136,6 +164,11 @@ public:
     {
         // std::cout << "DUDE wtf can i do i am a stone you piece of shit" << std::endl;
     }
+    
+    virtual void getStunned(int duration)
+    {
+        
+    }
 };
 
 
@@ -145,7 +178,7 @@ public:
 class Food: public Actor
 {
 public:
-    Food(int startX, int startY, int units, StudentWorld* world): Actor(IID_FOOD, startX, startY, right, 2, FOOD, units, false, true, world)
+    Food(int startX, int startY, int units, StudentWorld* world): Actor(IID_FOOD, startX, startY, right, 2, FOOD, units, 0, false, true, world)
     {
         
     }
@@ -163,12 +196,52 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Pool of Water class
+
+class PoolofWater: public Actor
+{
+public:
+    PoolofWater(int startX, int startY, StudentWorld* world): Actor(IID_WATER_POOL, startX, startY, right, 2, WATER_POOL, 100, 0, false, true, world)
+    {
+        
+    }
+    
+    virtual ~PoolofWater()
+    {
+        
+    }
+    
+    virtual void doSomething();
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Poison class
+
+class Poison: public Actor
+{
+public:
+    Poison(int startX, int startY, StudentWorld* world): Actor(IID_POISON, startX, startY, right, 2, POISON, 100, 0, false, true, world)
+    {
+        
+    }
+    
+    virtual ~Poison()
+    {
+        
+    }
+    
+    virtual void doSomething();
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
 class Insect: public Actor
 {
 public:
-    Insect(int ImageID, int startX, int startY, int type, int hp, int damage, int hunger, int drop, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, type, hp, false, false, world), m_sleepCounter(0), m_walkCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop)
+    Insect(int ImageID, int startX, int startY, int type, int hp, int damage, int hunger, int drop, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, type, hp, 100, false, false, world), m_walkCounter(0), m_damage(damage), m_hunger(hunger)
     {
         newDir();
     }
@@ -179,11 +252,6 @@ public:
     }
     
     // Accessors
-    int sleepCounter() const
-    {
-        return m_sleepCounter;
-    }
-    
     int getDamage() const
     {
         return m_damage;
@@ -200,10 +268,6 @@ public:
     }
     
     // Mutators
-    void setSleep(int count)
-    {
-        m_sleepCounter = count;
-    }
     
     void setWalkCounter(int num)
     {
@@ -211,8 +275,6 @@ public:
     }
     
     bool attemptAct();
-
-    void dropFood();
     
     // void bite(Actor &other);
     
@@ -225,12 +287,9 @@ public:
     virtual void doSomething() = 0;
     
 private:
-    int m_sleepCounter;
     int m_walkCounter;
     int m_damage;
     int m_hunger;
-    int m_drop;
-    
 };
 
 

@@ -137,6 +137,31 @@ void StudentWorld::stackFood(int x, int y, int amount)
     addActor(x, y, food);
 }
 
+void StudentWorld::stunAOE(int x, int y, int duration)
+{
+    vector<Actor*>::iterator it = m_actors[x][y].begin();
+    while (it != m_actors[x][y].end())
+    {
+        if ((*it)->getType() == BABY_GH || (*it)->getType() == ANT)
+        {
+            if (!(*it)->isStunned() && !(*it)->isDead())
+                (*it)->getStunned(duration);
+        }
+        it++;
+    }
+}
+
+void StudentWorld::damageAOE(int x, int y, int damage)
+{
+    for (int i = 0; i < m_actors[x][y].size(); i++)
+    {
+        if ((m_actors[x][y][i]->getType() == BABY_GH || m_actors[x][y][i]->getType() == ANT) && (!m_actors[x][y][i]->isDead()))
+        {
+            m_actors[x][y][i]->loseHP(damage);
+        }
+    }
+}
+
 void StudentWorld::parseField()
 {
     Field f;
@@ -174,13 +199,12 @@ void StudentWorld::parseField()
                     break;
                 case (Field::FieldItem::food):
                     actor = new Food(x, y, 6000, this);
-                    // hasItem = false;
                     break;
                 case (Field::FieldItem::water):
-                    hasItem = false;
+                    actor = new PoolofWater(x, y, this);
                     break;
                 case (Field::FieldItem::poison):
-                    hasItem = false;
+                    actor = new Poison(x, y, this);
                     break;
                 case (Field::FieldItem::rock):
                     actor = new Pebble(x, y, this);
