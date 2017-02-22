@@ -1,22 +1,25 @@
 #include "Actor.h"
 #include "StudentWorld.h"
 #include <iostream>
+#include <cmath>
 
 // Students:  Add code to this file (if you wish), Actor.h, StudentWorld.h, and StudentWorld.cpp
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Actor class
+
 void Actor::loseHP(int num)
 {
     m_hp = m_hp > num ? (m_hp - num) : 0;
     if (isDead())
-        dropFood(100);
+        dropFood(m_drop);
 }
 
 void Actor::dropFood(int amount)
 {
-    m_world->stackFood(getX(), getY(), amount);
+    if (amount > 0)
+        m_world->stackFood(getX(), getY(), amount);
 }
 
 
@@ -64,7 +67,14 @@ bool Insect::attemptAct()
     return true;
 }
 
-//void Insect::bite()
+bool Insect::bite()
+{
+    StudentWorld* world = getWorld();
+    bool didDamage = getWorld()->damageRand(getX(), getY(), m_damage, this);
+    if (didDamage)
+        return true;
+    return false;
+}
 
 bool Insect::eat()
 {
@@ -155,39 +165,93 @@ void Insect::newDir()
 void BabyGrasshopper::doSomething()
 {
     // std::cout << "I am prompted to do something" << std::endl;
+    if (!attemptAct() || mature())
+        return;
+ 
+    int rest = 0;
+    if (eat())
+        rest = randInt(0, 1);
+        
+    if (!rest)
+        move();
+    
+    setSleep(2);
+}
+
+bool BabyGrasshopper::mature()
+{
+    if (getHP() >= 1600)
+    {
+        Actor* adult = new AdultGrasshopper(getX(), getY(), getWorld());
+        getWorld()->addActor(getX(), getY(), adult);
+        loseHP(getHP());
+        return true;
+    }
+    
+    return false;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Adult grasshopper class
+
+void AdultGrasshopper::doSomething()
+{
     if (!attemptAct())
         return;
-
-    if (doGrasshopperThings())
+    
+    bool skipAct = false;
+    
+    if (randInt(1, 3) == 3)
     {
-        if (isDead())
-            return;
-        
+        if (bite())
+            skipAct = true;
+    }
+    
+    else if (randInt(1, 10) == 10)
+    {
+        if (jump())
+            skipAct = true;
+    }
+    
+    if (!skipAct)
+    {
         int rest = 0;
         if (eat())
             rest = randInt(0, 1);
-        
+    
         if (!rest)
             move();
     }
     
     setSleep(2);
-}
-
-bool BabyGrasshopper::doGrasshopperThings()
-{
-    /*if (getHP() >= 1600)
-    {
-        // mature();
-        // Actor* adult = new Grasshopper:
-        Actor* adult = nullptr;
-        getWorld()->addActor(getX(), getY(), adult);
-        loseHP(getHP());
-        return 0;
-    }*/
+    return;
     
-    return 1;
 }
 
-// void BabyGrasshopper::mature()
+bool AdultGrasshopper::jump()
+{
+    StudentWorld* world = getWorld();
+    int num = 0;
+    
+    while (num <= 300)
+    {
+        num++;
+        int distance = randInt(0, 10);
+        float angle = static_cast<float>(randInt(0, 360));
+        int dX = static_cast<int>(distance * cos(angle));
+        int dY = static_cast<int>(distance * sin(angle));
+        if (dX == 0 && dY == 0)
+            continue;
+        if (!world->isBlocked(getX() + dX, getY() + dY))
+        {
+            world->moveActor(getX(), getY(), getX() + dX, getY() + dY, this);
+            moveTo(getX() + dX, getY() + dY);
+            return true;
+        }
+    }
+   
+    return false;
+    
+}
 

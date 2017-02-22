@@ -23,6 +23,9 @@ const int ADULT_GH = 7;
 const int PHEROMONE = 8;
 const int ANT = 9;
 
+// Factions
+const int NEUTRAL = 0;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utilities
 
@@ -35,7 +38,7 @@ class StudentWorld;
 class Actor: public GraphObject
 {
 public:
-    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int type, int hp, int drop, bool isBlockage, bool isImmobile, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_type(type), m_hp(hp), m_drop(drop), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true), m_stunned(false), m_sleepCounter(0)
+    Actor(int ImageID, int startX, int startY, Direction startDirection, unsigned int depth, int type, int hp, int drop, bool isBlockage, bool isImmobile, int faction, StudentWorld* world): GraphObject(ImageID, startX, startY, startDirection, depth), m_type(type), m_hp(hp), m_drop(drop), m_world(world), m_blockage(isBlockage), m_immobile(isImmobile), m_active(true), m_stunned(false), m_sleepCounter(0), m_faction(faction)
     {
       
     }
@@ -49,6 +52,11 @@ public:
     int getType() const
     {
         return m_type;
+    }
+    
+    int getFaction() const
+    {
+        return m_faction;
     }
     
     int getHP() const
@@ -136,6 +144,7 @@ private:
     int m_hp;
     int m_sleepCounter;
     int m_drop;
+    int m_faction;
     bool m_blockage;
     bool m_immobile;
     bool m_active;
@@ -150,7 +159,7 @@ private:
 class Pebble: public Actor
 {
 public:
-    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, ROCK, 100, 100, true, true, world)
+    Pebble(int startX, int startY, StudentWorld* world): Actor(IID_ROCK, startX, startY, right, 1, ROCK, 100, 0, true, true, NEUTRAL, world)
     {
         
     }
@@ -173,7 +182,7 @@ public:
 class Food: public Actor
 {
 public:
-    Food(int startX, int startY, int units, StudentWorld* world): Actor(IID_FOOD, startX, startY, right, 2, FOOD, units, 0, false, true, world)
+    Food(int startX, int startY, int units, StudentWorld* world): Actor(IID_FOOD, startX, startY, right, 2, FOOD, units, 0, false, true, NEUTRAL, world)
     {
         
     }
@@ -196,7 +205,7 @@ public:
 class PoolofWater: public Actor
 {
 public:
-    PoolofWater(int startX, int startY, StudentWorld* world): Actor(IID_WATER_POOL, startX, startY, right, 2, WATER_POOL, 100, 0, false, true, world)
+    PoolofWater(int startX, int startY, StudentWorld* world): Actor(IID_WATER_POOL, startX, startY, right, 2, WATER_POOL, 100, 0, false, true, NEUTRAL, world)
     {
         
     }
@@ -216,7 +225,7 @@ public:
 class Poison: public Actor
 {
 public:
-    Poison(int startX, int startY, StudentWorld* world): Actor(IID_POISON, startX, startY, right, 2, POISON, 100, 0, false, true, world)
+    Poison(int startX, int startY, StudentWorld* world): Actor(IID_POISON, startX, startY, right, 2, POISON, 100, 0, false, true, NEUTRAL, world)
     {
         
     }
@@ -236,7 +245,7 @@ public:
 class Insect: public Actor
 {
 public:
-    Insect(int ImageID, int startX, int startY, int type, int hp, int damage, int hunger, int drop, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, type, hp, 100, false, false, world), m_walkCounter(0), m_damage(damage), m_hunger(hunger)
+    Insect(int ImageID, int startX, int startY, int type, int hp, int damage, int hunger, int drop, int faction, StudentWorld* world): Actor(ImageID, startX, startY, none, 1, type, hp, drop, false, false, faction, world), m_walkCounter(0), m_damage(damage), m_hunger(hunger)
     {
         newDir();
     }
@@ -271,7 +280,7 @@ public:
     
     bool attemptAct();
     
-    // void bite(Actor &other);
+    bool bite();
     
     bool eat();
     
@@ -294,7 +303,7 @@ private:
 class BabyGrasshopper: public Insect
 {
 public:
-    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, BABY_GH, 500, 0, 200, 100, world)
+    BabyGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_BABY_GRASSHOPPER, startX, startY, BABY_GH, 500, 0, 200, 100, NEUTRAL, world)
     {
     
     }
@@ -306,9 +315,29 @@ public:
     
     virtual void doSomething();
     
-    virtual bool doGrasshopperThings();
+    bool mature();
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The Adult grasshopper class
+
+class AdultGrasshopper: public Insect
+{
+public:
+    AdultGrasshopper(int startX, int startY, StudentWorld* world): Insect(IID_ADULT_GRASSHOPPER, startX, startY, ADULT_GH, 1600, 50, 200, 100, NEUTRAL, world)
+    {
     
-    // void mature();
+    }
+    
+    virtual ~AdultGrasshopper()
+    {
+    
+    }
+    
+    virtual void doSomething();
+    
+    bool jump();
 };
 
 #endif // ACTOR_H_

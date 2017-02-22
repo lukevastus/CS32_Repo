@@ -51,6 +51,8 @@ public:
     
     void damageAOE(int x, int y, int damage);
     
+    bool damageRand(int x, int y, int damage, Actor* source);
+    
 private:
     int m_tks; // Number of ticks, maximum is 2000
     std::vector<Actor*> m_actors[VIEW_WIDTH][VIEW_HEIGHT];

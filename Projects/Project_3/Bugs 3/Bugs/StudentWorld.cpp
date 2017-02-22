@@ -54,8 +54,10 @@ int StudentWorld::move()
     resetField();
     setDisplayText();
     
-    return 0;
-    //return GWSTATUS_NO_WINNER;
+    if (m_tks == 5000) // Game should terminate after 2000 ticks, this is only for testing purposes
+        return GWSTATUS_NO_WINNER;
+    
+    return GWSTATUS_CONTINUE_GAME;
 }
 
 // Removes all dynamicly allocated memory after the simulation is over
@@ -77,6 +79,9 @@ void StudentWorld::cleanUp()
 
 bool StudentWorld::isBlocked(int x, int y) const
 {
+    if (x < 0 || x >= VIEW_WIDTH || y < 0 || y >= VIEW_WIDTH)
+        return true;
+    
     if (!m_actors[x][y].empty())
     {
         Actor* actor = m_actors[x][y][0];
@@ -160,6 +165,32 @@ void StudentWorld::damageAOE(int x, int y, int damage)
             m_actors[x][y][i]->loseHP(damage);
         }
     }
+}
+
+bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
+{
+    int max = 0;
+    int maxpos = -1;
+    int faction = source->getFaction();
+    
+    for (int i = 0; i < m_actors[x][y].size(); i++)
+    {
+        if ((m_actors[x][y][i]->getFaction() == NEUTRAL || m_actors[x][y][i]->getFaction() != faction) && !m_actors[x][y][i]->isImmobile() && m_actors[x][y][i] != source)
+        {
+            if (randInt(0, 9999) > max)
+                maxpos = i;
+        }
+    }
+    
+    if (maxpos != -1)
+    {
+        m_actors[x][y][maxpos]->loseHP(damage);
+        if (randInt(0, 1) == 1 && m_actors[x][y][maxpos]->getType() == ADULT_GH)
+            damageRand(x, y, 50, m_actors[x][y][maxpos]);
+        return true;
+    }
+    
+    return false;
 }
 
 void StudentWorld::parseField()
