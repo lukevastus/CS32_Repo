@@ -4,7 +4,6 @@
 #include "GameConstants.h"
 #include "GraphObject.h"
 #include <iostream>
-#include <string>
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
@@ -25,15 +24,12 @@ const int PHEROMONE = 8;
 const int ANT = 9;
 
 // Factions
-const int NEUTRAL = 5;
-const int UNSPECIFIED = 6;
-const int ENEMY = 7;
+const int NEUTRAL = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utilities
 
 class StudentWorld;
-class Compiler;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,8 +136,6 @@ public:
     void loseHP(int num);
 
     void dropFood(int amount);
-    
-    bool consumeFood(int amount);
 
     virtual void doSomething() = 0;
     
@@ -246,53 +240,6 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The Pheromone class
-
-class Pheromone: public Actor
-{
-public:
-    Pheromone(int startX, int startY, int faction, StudentWorld* world): Actor(faction + 11, startX, startY, right, 2, PHEROMONE, 256, 0, false, true, faction, world)
-    {
-    
-    }
-    
-    virtual ~Pheromone()
-    {
-    
-    }
-    
-    virtual void doSomething()
-    {
-        loseHP(1);
-    }
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The Anthill class
-
-class AntHill: public Actor
-{
-public:
-    AntHill(int startX, int startY, int faction, Compiler* compiler, StudentWorld* world): Actor(IID_ANT_HILL, startX, startY, right, 2, ANT_HILL, 8999, 0, false, true, faction, world), m_compiler(compiler)
-    {
-    
-    }
-    
-    virtual ~AntHill()
-    {
-    
-    }
-    
-    virtual void doSomething();
-    
-private:
-    Compiler* m_compiler;
-    void spawnAnt();
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
 class Insect: public Actor
@@ -337,11 +284,9 @@ public:
     
     bool eat();
     
-    bool move(bool random);
+    void move();
     
     void newDir();
-    
-    void frontGrid(int &x, int &y);
     
     virtual void doSomething() = 0;
     
@@ -369,8 +314,7 @@ public:
     }
     
     virtual void doSomething();
-
-private:
+    
     bool mature();
 };
 
@@ -393,38 +337,7 @@ public:
     
     virtual void doSomething();
     
-private:
     bool jump();
-};
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The Ant class
-
-class Ant: public Insect
-{
-public:
-    Ant(int startX, int startY, int faction, Compiler* compiler, StudentWorld* world): Insect(faction, startX, startY, ANT, 1500, 15, 0, 100, faction, world), m_food(0), m_lastRand(0), m_insCounter(0), m_prevBitten(false), m_prevBlocked(false), m_compiler(compiler)
-    {
-        
-    }
-
-    virtual ~Ant()
-    {
-    
-    }
-    
-    virtual void doSomething();
-
-private:
-    int m_food;
-    int m_lastRand;
-    int m_insCounter;
-    bool m_prevBitten;
-    bool m_prevBlocked;
-    Compiler* m_compiler;
-    
-    bool canExecute(std::string op);
 };
 
 #endif // ACTOR_H_

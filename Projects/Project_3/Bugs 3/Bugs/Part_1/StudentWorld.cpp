@@ -1,6 +1,5 @@
 #include "StudentWorld.h"
 #include "Actor.h"
-#include "Compiler.h"
 #include "Field.h"
 #include <string>
 #include <iostream>
@@ -17,15 +16,6 @@ GameWorld* createStudentWorld(string assetDir)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The StudentWorld class
 
-StudentWorld::StudentWorld(string assetDir): GameWorld(assetDir), m_clean(true), m_tks(0)
-{
-    for (int i = 0; i < 4; i++)
-    {
-        m_antCount[i] = 0;
-        m_compilers[i] = nullptr;
-    }
-}
-
 StudentWorld::~StudentWorld()
 {
     cleanUp();
@@ -34,20 +24,8 @@ StudentWorld::~StudentWorld()
 // Initializes the map, set ticks to 0
 int StudentWorld::init()
 {
-    std::vector<string> files = getFilenamesOfAntPrograms();
-    for (int i = 0; i < 4; i++)
-    {
-        std::string error;
-        m_compilers[i] = new Compiler;
-        if (!m_compilers[i]->compile(files[i], error))
-        {
-            setError(files[i] + " " + error);
-            return GWSTATUS_LEVEL_ERROR;
-        }
-    }
-    
     parseField();
-    m_clean = false;
+    m_tks = 0;
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -85,9 +63,6 @@ int StudentWorld::move()
 // Removes all dynamicly allocated memory after the simulation is over
 void StudentWorld::cleanUp()
 {
-    if (m_clean)
-        return;
-    
     for (int x = 0; x < 64; x++)
     {
         for (int y = 0; y < 64; y++)
@@ -100,16 +75,6 @@ void StudentWorld::cleanUp()
             }
         }
     }
-    
-    for (int i = 0; i < 4; i++)
-    {
-        if (m_compilers[i] != nullptr)
-        {
-            delete m_compilers[i];
-        }
-    }
-    
-    m_clean = true;
 }
 
 bool StudentWorld::isBlocked(int x, int y) const
@@ -122,23 +87,6 @@ bool StudentWorld::isBlocked(int x, int y) const
         Actor* actor = m_actors[x][y][0];
         return actor->isBlockage();
     }
-    return false;
-}
-
-bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFaction) const
-{
-    for (int i = 0; i < m_actors[x][y].size(); i++)
-    {
-        if (m_actors[x][y][i]->getType() == type && !m_actors[x][y][i]->isDead())
-        {
-            if (isFaction != UNSPECIFIED && m_actors[x][y][i]->getFaction() == isFaction)
-                return true;
-            
-            if (notFaction != UNSPECIFIED && m_actors[x][y][i]->getFaction() != notFaction)
-                return true;
-        }
-    }
-    
     return false;
 }
 
@@ -159,12 +107,12 @@ void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *acto
     return;
 }
 
-int StudentWorld::reduceFood(int x, int y, int amount)
+int StudentWorld::consumeFood(int x, int y, int amount)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
     while (it != m_actors[x][y].end())
     {
-        if ((*it)->getType() == FOOD && !(*it)->isDead())
+        if ((*it)->getType() == FOOD)
         {
             int units = (*it)->getHP();
             int amountEaten = units > amount ? amount : units;
@@ -174,7 +122,7 @@ int StudentWorld::reduceFood(int x, int y, int amount)
         it++;
     }
     
-    return -1; // Food not found
+    return 0;
 }
 
 void StudentWorld::stackFood(int x, int y, int amount)
@@ -212,7 +160,7 @@ void StudentWorld::damageAOE(int x, int y, int damage)
 {
     for (int i = 0; i < m_actors[x][y].size(); i++)
     {
-        if ((m_actors[x][y][i]->getType() == BABY_GH || m_actors[x][y][i]->getType() == ANT) && !m_actors[x][y][i]->isDead())
+        if ((m_actors[x][y][i]->getType() == BABY_GH || m_actors[x][y][i]->getType() == ANT) && (!m_actors[x][y][i]->isDead()))
         {
             m_actors[x][y][i]->loseHP(damage);
         }
@@ -227,7 +175,7 @@ bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
     
     for (int i = 0; i < m_actors[x][y].size(); i++)
     {
-        if ((m_actors[x][y][i]->getFaction() == NEUTRAL || m_actors[x][y][i]->getFaction() != faction) && !m_actors[x][y][i]->isImmobile() && m_actors[x][y][i] != source && !m_actors[x][y][i]->isDead())
+        if ((m_actors[x][y][i]->getFaction() == NEUTRAL || m_actors[x][y][i]->getFaction() != faction) && !m_actors[x][y][i]->isImmobile() && m_actors[x][y][i] != source)
         {
             if (randInt(0, 9999) > max)
                 maxpos = i;
@@ -237,30 +185,12 @@ bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
     if (maxpos != -1)
     {
         m_actors[x][y][maxpos]->loseHP(damage);
-        if (randInt(0, 1) == 1 && m_actors[x][y][maxpos]->getType() == ADULT_GH && !m_actors[x][y][maxpos]->isDead())
+        if (randInt(0, 1) == 1 && m_actors[x][y][maxpos]->getType() == ADULT_GH)
             damageRand(x, y, 50, m_actors[x][y][maxpos]);
         return true;
     }
     
     return false;
-}
-
-void StudentWorld::dropPheromone(int x, int y, int faction)
-{
-    vector<Actor*>::iterator it = m_actors[x][y].begin();
-    while (it != m_actors[x][y].end())
-    {
-        if ((*it)->getType() == PHEROMONE && (*it)->getFaction() == faction)
-        {
-            int added = ((*it)->getHP() + 256) > 768 ? (768 - (*it)->getHP()) : 256;
-            (*it)->gainHP(added);
-            return;
-        }
-        it++;
-    }
-    
-    Actor* pheromone = new Pheromone(x, y, faction, this);
-    addActor(x, y, pheromone);
 }
 
 void StudentWorld::parseField()
@@ -287,16 +217,16 @@ void StudentWorld::parseField()
                     hasItem = false;
                     break;
                 case (Field::FieldItem::anthill0):
-                    actor = new AntHill(x, y, 0, m_compilers[0], this);
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill1):
-                    actor = new AntHill(x, y, 1, m_compilers[1], this);
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill2):
-                    actor = new AntHill(x, y, 2, m_compilers[2], this);
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::anthill3):
-                    actor = new AntHill(x, y, 3, m_compilers[3], this);
+                    hasItem = false;
                     break;
                 case (Field::FieldItem::food):
                     actor = new Food(x, y, 6000, this);
@@ -352,6 +282,9 @@ void StudentWorld::resetField()
         }
     }
 }
+
+
+
 
 
 
