@@ -64,6 +64,7 @@ public:
 private:
     bool m_clean;
     int m_tks; // Number of ticks, maximum is 2000
+    int m_playerNum; // Number of players
     int m_antCount[4]; // Number of ants produced for each colony
     Compiler* m_compilers[4]; // The compilers for each colony
     std::vector<Actor*> m_actors[VIEW_WIDTH][VIEW_HEIGHT];
@@ -73,6 +74,7 @@ private:
     void setDisplayText();
     void resetField();
     void setCompilers();
+    int winningColony() const;
 };
 
 #endif // STUDENTWORLD_H_

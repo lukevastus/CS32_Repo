@@ -8,24 +8,9 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The Actor class
+// The Mortal class
 
-void Actor::loseHP(int num)
-{
-    m_hp = m_hp > num ? (m_hp - num) : 0;
-    if (isDead())
-    {
-        dropFood(m_drop);
-    }
-}
-
-void Actor::dropFood(int amount)
-{
-    if (amount > 0)
-        m_world->stackFood(getX(), getY(), amount);
-}
-
-bool Actor::consumeFood(int amount)
+bool Mortal::consumeFood(int amount)
 {
     StudentWorld* world = getWorld();
     int amountEaten = world->reduceFood(getX(), getY(), amount);
@@ -83,6 +68,22 @@ void AntHill::spawnAnt()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
+
+void Insect::loseHP(int amount)
+{
+    Mortal::loseHP(amount);
+    // if (amount > 1)
+        // std::cout << "I lost" << amount << "HP!" << std::endl;
+    if (isDead())
+        dropFood(m_drop);
+}
+
+void Insect::getStunned(int duration)
+{
+    if (!m_stunned)
+        m_sleepCounter += duration;
+    m_stunned = true;
+}
 
 bool Insect::attemptAct() // Checks if the insect is dead or stunned
 {
@@ -196,6 +197,13 @@ void Insect::frontGrid(int &x, int &y)
     }
 }
 
+void Insect::dropFood(int amount)
+{
+    if (amount > 0)
+        getWorld()->stackFood(getX(), getY(), amount);
+    // std::cout << amount << " dropped the stick!" << std::endl;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Baby grasshopper class
@@ -232,6 +240,16 @@ bool BabyGrasshopper::mature()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Adult grasshopper class
+
+void AdultGrasshopper::getBitten(int damage)
+{
+    Insect::getBitten(damage);
+    if (randInt(0, 1) == 1)
+    {
+        // std::cout << "FITE ME!" << std::endl;
+        getWorld()->damageRand(getX(), getY(), getDamage(), this);
+    }
+}
 
 void AdultGrasshopper::doSomething()
 {
@@ -299,13 +317,17 @@ bool AdultGrasshopper::jump()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Ant class
 
+void Ant::getBitten(int damage)
+{
+    Insect::getBitten(damage);
+    m_bitten = true;
+    // std::cout << "I was bit!" << std::endl;
+}
+
 void Ant::doSomething()
 {
     if (!attemptAct())
-    {
-        if (isDead())
-            return;
-    }
+        return;
     
     int cmdCounter = 0;
     Compiler::Command cmd;
@@ -367,7 +389,7 @@ void Ant::doSomething()
                 if (move(false))
                 {
                     m_prevBlocked = false;
-                    m_prevBitten = false;
+                    m_bitten = false;
                 }
                 
                 else
@@ -383,32 +405,20 @@ void Ant::doSomething()
             }
             
             case Compiler::dropFood:
-                if (m_food > 0)
-                {
-                    dropFood(m_food);
-                    m_food = 0;
-                    return;
-                }
-                break;
+                dropFood(m_food);
+                m_food = 0;
+                return;
             
             case Compiler::bite:
-                if (bite())
-                {
-                    std::cout << "FITE ME" << std::endl;
-                    return;
-                }
-                break;
+                bite();
+                return;
             
             case Compiler::pickupFood:
             {
                 int attempt = (m_food + 400) > 1800 ? (1800 - m_food) : 400;
                 int actual = getWorld()->reduceFood(getX(), getY(), attempt);
-                if (actual > 0)
-                {
-                    m_food += actual;
-                    return;
-                }
-                break;
+                m_food += actual;
+                return;
             }
                 
             case Compiler::emitPheromone:
@@ -499,7 +509,7 @@ bool Ant::canExecute(std::string op)
         }
             
         case Compiler::i_was_bit:
-            return m_prevBitten;
+            return m_bitten;
         
         case Compiler::i_was_blocked_from_moving:
             return m_prevBlocked;

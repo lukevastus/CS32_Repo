@@ -4,6 +4,8 @@
 #include "Field.h"
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 
 GameWorld* createStudentWorld(string assetDir)
@@ -17,7 +19,7 @@ GameWorld* createStudentWorld(string assetDir)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The StudentWorld class
 
-StudentWorld::StudentWorld(string assetDir): GameWorld(assetDir), m_clean(true), m_tks(0)
+StudentWorld::StudentWorld(string assetDir): GameWorld(assetDir), m_clean(true), m_tks(0), m_playerNum(0)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -35,7 +37,7 @@ StudentWorld::~StudentWorld()
 int StudentWorld::init()
 {
     std::vector<string> files = getFilenamesOfAntPrograms();
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < files.size(); i++)
     {
         std::string error;
         m_compilers[i] = new Compiler;
@@ -44,6 +46,7 @@ int StudentWorld::init()
             setError(files[i] + " " + error);
             return GWSTATUS_LEVEL_ERROR;
         }
+        m_playerNum++;
     }
     
     parseField();
@@ -58,13 +61,13 @@ int StudentWorld::move()
 {
     m_tks++;
     
-    for (int x = 1; x < 63; x++)
+    for (int x = 1; x < VIEW_WIDTH - 1; x++)
     {
-        for (int y = 1; y < 63; y++)
+        for (int y = 1; y < VIEW_HEIGHT - 1; y++)
         {
             for (int i = 0; i < m_actors[x][y].size(); i++)
             {
-                if (m_actors[x][y][i]->isActive())
+                if (m_actors[x][y][i]->isActive() && !m_actors[x][y][i]->isDead())
                 {
                     m_actors[x][y][i]->doSomething();
                     m_actors[x][y][i]->deactivate();
@@ -77,7 +80,14 @@ int StudentWorld::move()
     setDisplayText();
     
     if (m_tks == 2000) // Game should terminate after 2000 ticks, this is only for testing purposes
+    {
+        if (winningColony() != -1)
+        {
+            setWinner(m_compilers[winningColony()]->getColonyName());
+            return GWSTATUS_PLAYER_WON;
+        }
         return GWSTATUS_NO_WINNER;
+    }
     
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -88,9 +98,9 @@ void StudentWorld::cleanUp()
     if (m_clean)
         return;
     
-    for (int x = 0; x < 64; x++)
+    for (int x = 0; x < VIEW_WIDTH; x++)
     {
-        for (int y = 0; y < 64; y++)
+        for (int y = 0; y < VIEW_HEIGHT; y++)
         {
             vector<Actor*>::iterator it = m_actors[x][y].begin();
             while (it != m_actors[x][y].end())
@@ -101,7 +111,7 @@ void StudentWorld::cleanUp()
         }
     }
     
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < m_playerNum; i++)
     {
         if (m_compilers[i] != nullptr)
         {
@@ -112,6 +122,7 @@ void StudentWorld::cleanUp()
     m_clean = true;
 }
 
+// Check if grid is blocked by a pebble
 bool StudentWorld::isBlocked(int x, int y) const
 {
     if (x < 0 || x >= VIEW_WIDTH || y < 0 || y >= VIEW_WIDTH)
@@ -125,6 +136,7 @@ bool StudentWorld::isBlocked(int x, int y) const
     return false;
 }
 
+// Check if an alive actor with faction isFaction OR with faction not notFaction is on grid
 bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFaction) const
 {
     for (int i = 0; i < m_actors[x][y].size(); i++)
@@ -142,6 +154,7 @@ bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFa
     return false;
 }
 
+// Move the actor to a new grid position
 void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor)
 {
     vector<Actor*>::iterator it = m_actors[oldX][oldY].begin();
@@ -159,6 +172,7 @@ void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *acto
     return;
 }
 
+// Reduced the amount of food present on grid (x, y)
 int StudentWorld::reduceFood(int x, int y, int amount)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
@@ -177,6 +191,7 @@ int StudentWorld::reduceFood(int x, int y, int amount)
     return -1; // Food not found
 }
 
+// Puts a Food object on grid (x, y). If there's already a Food then increase its strength
 void StudentWorld::stackFood(int x, int y, int amount)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
@@ -194,20 +209,19 @@ void StudentWorld::stackFood(int x, int y, int amount)
     addActor(x, y, food);
 }
 
+// Stuns all vulnerable insects on grid (x, y)
 void StudentWorld::stunAOE(int x, int y, int duration)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
     while (it != m_actors[x][y].end())
     {
-        if ((*it)->getType() == BABY_GH || (*it)->getType() == ANT)
-        {
-            if (!(*it)->isStunned() && !(*it)->isDead())
-                (*it)->getStunned(duration);
-        }
+        if (!(*it)->isDead())
+            (*it)->getStunned(duration);
         it++;
     }
 }
 
+// Damages all vulnerable insects on grid (x, y)
 void StudentWorld::damageAOE(int x, int y, int damage)
 {
     for (int i = 0; i < m_actors[x][y].size(); i++)
@@ -219,6 +233,7 @@ void StudentWorld::damageAOE(int x, int y, int damage)
     }
 }
 
+// Randomly deals damage to one of the insects (which is not the source of damage) on grid (x, y)
 bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
 {
     int max = 0;
@@ -236,15 +251,14 @@ bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
     
     if (maxpos != -1)
     {
-        m_actors[x][y][maxpos]->loseHP(damage);
-        if (randInt(0, 1) == 1 && m_actors[x][y][maxpos]->getType() == ADULT_GH && !m_actors[x][y][maxpos]->isDead())
-            damageRand(x, y, 50, m_actors[x][y][maxpos]);
+        m_actors[x][y][maxpos]->getBitten(damage);
         return true;
     }
     
     return false;
 }
 
+// Puts a Pheromone object on grid (x, y). If there's already a Pheromone then increase its strength
 void StudentWorld::dropPheromone(int x, int y, int faction)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
@@ -263,19 +277,18 @@ void StudentWorld::dropPheromone(int x, int y, int faction)
     addActor(x, y, pheromone);
 }
 
+// Reads the field.txt file and put the actors in their initial positions
 void StudentWorld::parseField()
 {
     Field f;
     string filename = getFieldFilename();
-    // cout << filename << endl;
     Field::LoadResult loaded = f.loadField(filename);
     if (loaded == Field::load_fail_bad_format || loaded == Field::load_fail_file_not_found)
         return;
     
-    // cout << "LOADED FIELD" << endl;
-    for (int x = 0; x < 64; x++)
+    for (int x = 0; x < VIEW_WIDTH; x++)
     {
-        for (int y = 0; y < 64; y++)
+        for (int y = 0; y < VIEW_HEIGHT; y++)
         {
             Field::FieldItem item = f.getContentsOf(x, y);
             Actor* actor = nullptr;
@@ -283,20 +296,27 @@ void StudentWorld::parseField()
             switch (item)
             {
                 case (Field::FieldItem::empty):
-                    // cout << "emptyyyy" << endl;
                     hasItem = false;
                     break;
                 case (Field::FieldItem::anthill0):
-                    actor = new AntHill(x, y, 0, m_compilers[0], this);
+                    if (m_playerNum > 0)
+                        actor = new AntHill(x, y, 0, m_compilers[0], this);
+                    else hasItem = false;
                     break;
                 case (Field::FieldItem::anthill1):
-                    actor = new AntHill(x, y, 1, m_compilers[1], this);
+                    if (m_playerNum > 1)
+                        actor = new AntHill(x, y, 1, m_compilers[1], this);
+                    else hasItem = false;
                     break;
                 case (Field::FieldItem::anthill2):
-                    actor = new AntHill(x, y, 2, m_compilers[2], this);
+                    if (m_playerNum > 2)
+                        actor = new AntHill(x, y, 2, m_compilers[2], this);
+                    else hasItem = false;
                     break;
                 case (Field::FieldItem::anthill3):
-                    actor = new AntHill(x, y, 3, m_compilers[3], this);
+                    if (m_playerNum > 3)
+                        actor = new AntHill(x, y, 3, m_compilers[3], this);
+                    else hasItem = false;
                     break;
                 case (Field::FieldItem::food):
                     actor = new Food(x, y, 6000, this);
@@ -321,18 +341,35 @@ void StudentWorld::parseField()
     }
 }
 
+// Configures the displayed player information
 void StudentWorld::setDisplayText()
 {
-    string s = "Ticks elapsed: " + to_string(m_tks);
-    setGameStatText(s);
+    ostringstream text;
+    text << setw(5) << 2000 - m_tks;
+    string display = "Ticks:" + text.str() + " - ";
+    
+    for (int i = 0; i < m_playerNum; i++)
+    {
+        display += (m_compilers[i]->getColonyName());
+        if (i == winningColony())
+            display += '*';
+        
+        display += ": ";
+        ostringstream num;
+        num.fill('0');
+        num << setw(2) << m_antCount[i];
+        display += (num.str() + "  ");
+    }
+    
+    setGameStatText(display);
 }
 
 // Cleans up dead actors and reactivates all inactive (moved) actors
 void StudentWorld::resetField()
 {
-    for (int x = 0; x < 64; x++)
+    for (int x = 0; x < VIEW_WIDTH; x++)
     {
-        for (int y = 0; y < 64; y++)
+        for (int y = 0; y < VIEW_HEIGHT; y++)
         {
             std::vector<Actor*>::iterator it = m_actors[x][y].begin();
             while (it != m_actors[x][y].end())
@@ -351,6 +388,22 @@ void StudentWorld::resetField()
             }
         }
     }
+}
+
+// Returns the number of winning colony
+int StudentWorld::winningColony() const
+{
+    int winner = -1;
+    int maxAnt = 0;
+    for (int i = 0; i < m_playerNum; i++)
+    {
+        if (m_antCount[i] > maxAnt)
+        {
+            winner = i;
+            maxAnt = m_antCount[i];
+        }
+    }
+    return winner;
 }
 
 
