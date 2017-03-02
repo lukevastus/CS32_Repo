@@ -384,11 +384,6 @@ public:
     
     virtual void getStunned(int duration);
     
-    void getUnstunned()
-    {
-        m_stunned = false;
-    }
-    
     virtual void getBitten(int damage)
     {
         // std::cout << "ArgGGghhh!" << std::endl;

@@ -38,15 +38,7 @@ public:
     bool hasActorType(int x, int y, int type, int isFaction, int notFaction = 6) const;
         
     // Mutators
-    void addActor(int x, int y, Actor* actor)
-    {
-        m_actors[x][y].push_back(actor);
-    }
-    
-    void addAntCount(int faction)
-    {
-        m_antCount[faction]++;
-    }
+    void addActor(int x, int y, Actor* actor);
     
     void moveActor(int oldX, int oldY, int newX, int newY, Actor* actor);
     
@@ -67,6 +59,8 @@ private:
     int m_tks; // Number of ticks, maximum is 2000
     int m_playerNum; // Number of players
     int m_antCount[4]; // Number of ants produced for each colony
+    int m_winningColony; // Colony that is in lead
+    int m_winningNum; // Number of ants produced by the winning colony
     Compiler* m_compilers[4]; // The compilers for each colony
     std::vector<Actor*> m_actors[VIEW_WIDTH][VIEW_HEIGHT];
     
@@ -75,7 +69,12 @@ private:
     void setDisplayText();
     void resetField();
     void setCompilers();
-    int winningColony() const;
+    void countAnts();
+    
+    void addAntCount(int faction)
+    {
+        m_antCount[faction]++;
+    }
 };
 
 #endif // STUDENTWORLD_H_

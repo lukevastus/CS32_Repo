@@ -19,7 +19,7 @@ GameWorld* createStudentWorld(string assetDir)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The StudentWorld class
 
-StudentWorld::StudentWorld(string assetDir): GameWorld(assetDir), m_clean(true), m_tks(0), m_playerNum(0)
+StudentWorld::StudentWorld(string assetDir): GameWorld(assetDir), m_clean(true), m_tks(0), m_playerNum(0), m_winningNum(5), m_winningColony(-1)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -80,9 +80,9 @@ int StudentWorld::move()
     
     if (m_tks == GAME_LENGTH) // Game should terminate after 2000 ticks, this is only for testing purposes
     {
-        if (winningColony() != -1)
+        if (m_winningColony != -1)
         {
-            setWinner(m_compilers[winningColony()]->getColonyName());
+            setWinner(m_compilers[m_winningColony]->getColonyName());
             return GWSTATUS_PLAYER_WON;
         }
         return GWSTATUS_NO_WINNER;
@@ -147,6 +147,13 @@ bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFa
         }
     }
     return false;
+}
+
+void StudentWorld::addActor(int x, int y, Actor *actor)
+{
+    m_actors[x][y].push_back(actor);
+    if (actor->getType() == ANT)
+        addAntCount(actor->getFaction());
 }
 
 void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor) // Move the actor to a new grid position
@@ -330,14 +337,15 @@ void StudentWorld::parseField() // Reads the field.txt file and put the actors i
 
 void StudentWorld::setDisplayText() // Configures the displayed player information
 {
+    countAnts();
     ostringstream text;
     text << setw(5) << GAME_LENGTH - m_tks;
     string display = "Ticks:" + text.str() + " - ";
-    
+    int winner = m_winningColony;
     for (int i = 0; i < m_playerNum; i++)
     {
         display += (m_compilers[i]->getColonyName());
-        if (i == winningColony())
+        if (i == winner)
             display += '*';
         
         display += ": ";
@@ -375,19 +383,24 @@ void StudentWorld::resetField() // Cleans up dead actors and reactivates all ina
     }
 }
 
-int StudentWorld::winningColony() const // Returns the number of winning colony
+void StudentWorld::countAnts() // Counts the number of ants and find the colony that is winning
 {
     int winner = -1;
     int maxAnt = 0;
     for (int i = 0; i < m_playerNum; i++)
     {
-        if (m_antCount[i] > maxAnt)
+        if (m_antCount[i] > maxAnt && m_antCount[i] > m_winningNum)
         {
             winner = i;
             maxAnt = m_antCount[i];
         }
     }
-    return winner;
+    
+    if (winner != -1)
+    {
+        m_winningNum = m_antCount[winner];
+        m_winningColony = winner;
+    }
 }
 
 

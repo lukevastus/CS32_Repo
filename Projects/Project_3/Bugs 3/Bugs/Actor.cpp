@@ -61,7 +61,6 @@ void AntHill::doSomething()
 void AntHill::spawnAnt() // Spawn an ant at current grid
 {
     getWorld()->addActor(getX(), getY(), new Ant(getX(), getY(), getFaction(), m_compiler, getWorld()));
-    getWorld()->addAntCount(getFaction());
     loseHP(1500);
 }
 
@@ -100,7 +99,6 @@ bool Insect::attemptAct() // Checks if the insect is dead or stunned
         return false;
     }
     
-    getUnstunned();
     return true;
 }
 
@@ -145,6 +143,7 @@ bool Insect::move(bool random) // Moves according to self's inbuilt walk counter
     if (random)
         m_walkCounter--;
     
+    m_stunned = false;
     return true;
 }
 
