@@ -360,33 +360,7 @@ public:
         
     }
     
-    // Accessors
-    int getDamage() const
-    {
-        return m_damage;
-    }
-    
-    int getHunger() const
-    {
-        return m_hunger;
-    }
-    
-    int getWalkCounter() const
-    {
-        return m_walkCounter;
-    }
-    
-    int sleepCounter() const
-    {
-        return m_sleepCounter;
-    }
-    
-    // Mutators
-    void setWalkCounter(int num)
-    {
-        m_walkCounter = num;
-    }
-    
+    // Mutators    
     void setSleep(int num)
     {
         m_sleepCounter = num;

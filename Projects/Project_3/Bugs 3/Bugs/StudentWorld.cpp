@@ -33,8 +33,7 @@ StudentWorld::~StudentWorld()
     cleanUp();
 }
 
-// Initializes the map, set ticks to 0
-int StudentWorld::init()
+int StudentWorld::init() // Initializes the map
 {
     std::vector<string> files = getFilenamesOfAntPrograms();
     for (int i = 0; i < files.size(); i++)
@@ -79,7 +78,7 @@ int StudentWorld::move()
     resetField();
     setDisplayText();
     
-    if (m_tks == 2000) // Game should terminate after 2000 ticks, this is only for testing purposes
+    if (m_tks == GAME_LENGTH) // Game should terminate after 2000 ticks, this is only for testing purposes
     {
         if (winningColony() != -1)
         {
@@ -92,8 +91,7 @@ int StudentWorld::move()
     return GWSTATUS_CONTINUE_GAME;
 }
 
-// Removes all dynamicly allocated memory after the simulation is over
-void StudentWorld::cleanUp()
+void StudentWorld::cleanUp() // Removes all dynamicly allocated memory after the simulation is over
 {
     if (m_clean)
         return;
@@ -122,8 +120,7 @@ void StudentWorld::cleanUp()
     m_clean = true;
 }
 
-// Check if grid is blocked by a pebble
-bool StudentWorld::isBlocked(int x, int y) const
+bool StudentWorld::isBlocked(int x, int y) const // Check if grid is blocked by a pebble
 {
     if (x < 0 || x >= VIEW_WIDTH || y < 0 || y >= VIEW_WIDTH)
         return true;
@@ -136,8 +133,7 @@ bool StudentWorld::isBlocked(int x, int y) const
     return false;
 }
 
-// Check if an alive actor with faction isFaction OR with faction not notFaction is on grid
-bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFaction) const
+bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFaction) const // Check if an alive actor with faction isFaction OR with faction not notFaction is on grid
 {
     for (int i = 0; i < m_actors[x][y].size(); i++)
     {
@@ -150,12 +146,10 @@ bool StudentWorld::hasActorType(int x, int y, int type, int isFaction, int notFa
                 return true;
         }
     }
-    
     return false;
 }
 
-// Move the actor to a new grid position
-void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor)
+void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *actor) // Move the actor to a new grid position
 {
     vector<Actor*>::iterator it = m_actors[oldX][oldY].begin();
     while (it != m_actors[oldX][oldY].end())
@@ -172,8 +166,7 @@ void StudentWorld::moveActor(int oldX, int oldY, int newX, int newY, Actor *acto
     return;
 }
 
-// Reduced the amount of food present on grid (x, y)
-int StudentWorld::reduceFood(int x, int y, int amount)
+int StudentWorld::reduceFood(int x, int y, int amount) // Reduce the amount of food present on grid (x, y)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
     while (it != m_actors[x][y].end())
@@ -191,8 +184,7 @@ int StudentWorld::reduceFood(int x, int y, int amount)
     return -1; // Food not found
 }
 
-// Puts a Food object on grid (x, y). If there's already a Food then increase its strength
-void StudentWorld::stackFood(int x, int y, int amount)
+void StudentWorld::stackFood(int x, int y, int amount) // Puts a Food object on grid (x, y). If there's already a Food then increase its strength
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
     while (it != m_actors[x][y].end())
@@ -209,8 +201,7 @@ void StudentWorld::stackFood(int x, int y, int amount)
     addActor(x, y, food);
 }
 
-// Stuns all vulnerable insects on grid (x, y)
-void StudentWorld::stunAOE(int x, int y, int duration)
+void StudentWorld::stunAOE(int x, int y, int duration) // Stuns all vulnerable insects on grid (x, y)
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
     while (it != m_actors[x][y].end())
@@ -221,8 +212,7 @@ void StudentWorld::stunAOE(int x, int y, int duration)
     }
 }
 
-// Damages all vulnerable insects on grid (x, y)
-void StudentWorld::damageAOE(int x, int y, int damage)
+void StudentWorld::damageAOE(int x, int y, int damage) // Damages all vulnerable insects on grid (x, y)
 {
     for (int i = 0; i < m_actors[x][y].size(); i++)
     {
@@ -233,8 +223,7 @@ void StudentWorld::damageAOE(int x, int y, int damage)
     }
 }
 
-// Randomly deals damage to one of the insects (which is not the source of damage) on grid (x, y)
-bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
+bool StudentWorld::damageRand(int x, int y, int damage, Actor* source) // Randomly deals damage to one of the insects (which is not the source of damage) on grid (x, y)
 {
     int max = 0;
     int maxpos = -1;
@@ -258,8 +247,7 @@ bool StudentWorld::damageRand(int x, int y, int damage, Actor* source)
     return false;
 }
 
-// Puts a Pheromone object on grid (x, y). If there's already a Pheromone then increase its strength
-void StudentWorld::dropPheromone(int x, int y, int faction)
+void StudentWorld::dropPheromone(int x, int y, int faction) // Puts a Pheromone object on grid (x, y). If there's already a Pheromone then increase its strength
 {
     vector<Actor*>::iterator it = m_actors[x][y].begin();
     while (it != m_actors[x][y].end())
@@ -277,8 +265,7 @@ void StudentWorld::dropPheromone(int x, int y, int faction)
     addActor(x, y, pheromone);
 }
 
-// Reads the field.txt file and put the actors in their initial positions
-void StudentWorld::parseField()
+void StudentWorld::parseField() // Reads the field.txt file and put the actors in their initial positions
 {
     Field f;
     string filename = getFieldFilename();
@@ -341,11 +328,10 @@ void StudentWorld::parseField()
     }
 }
 
-// Configures the displayed player information
-void StudentWorld::setDisplayText()
+void StudentWorld::setDisplayText() // Configures the displayed player information
 {
     ostringstream text;
-    text << setw(5) << 2000 - m_tks;
+    text << setw(5) << GAME_LENGTH - m_tks;
     string display = "Ticks:" + text.str() + " - ";
     
     for (int i = 0; i < m_playerNum; i++)
@@ -364,8 +350,7 @@ void StudentWorld::setDisplayText()
     setGameStatText(display);
 }
 
-// Cleans up dead actors and reactivates all inactive (moved) actors
-void StudentWorld::resetField()
+void StudentWorld::resetField() // Cleans up dead actors and reactivates all inactive (moved) actors
 {
     for (int x = 0; x < VIEW_WIDTH; x++)
     {
@@ -390,8 +375,7 @@ void StudentWorld::resetField()
     }
 }
 
-// Returns the number of winning colony
-int StudentWorld::winningColony() const
+int StudentWorld::winningColony() const // Returns the number of winning colony
 {
     int winner = -1;
     int maxAnt = 0;

@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Mortal class
 
-bool Mortal::consumeFood(int amount)
+bool Mortal::consumeFood(int amount) // Eat food at current grid and convert to HP
 {
     StudentWorld* world = getWorld();
     int amountEaten = world->reduceFood(getX(), getY(), amount);
@@ -58,7 +58,7 @@ void AntHill::doSomething()
         spawnAnt();
 }
 
-void AntHill::spawnAnt()
+void AntHill::spawnAnt() // Spawn an ant at current grid
 {
     getWorld()->addActor(getX(), getY(), new Ant(getX(), getY(), getFaction(), m_compiler, getWorld()));
     getWorld()->addAntCount(getFaction());
@@ -69,11 +69,9 @@ void AntHill::spawnAnt()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The Insect class
 
-void Insect::loseHP(int amount)
+void Insect::loseHP(int amount) // Lose HP
 {
     Mortal::loseHP(amount);
-    // if (amount > 1)
-        // std::cout << "I lost" << amount << "HP!" << std::endl;
     if (isDead())
         dropFood(m_drop);
 }
@@ -81,8 +79,10 @@ void Insect::loseHP(int amount)
 void Insect::getStunned(int duration)
 {
     if (!m_stunned)
+    {
         m_sleepCounter += duration;
-    m_stunned = true;
+        m_stunned = true;
+    }
 }
 
 bool Insect::attemptAct() // Checks if the insect is dead or stunned
@@ -94,11 +94,9 @@ bool Insect::attemptAct() // Checks if the insect is dead or stunned
         return false;
     }
     
-    if (sleepCounter() > 0)
+    if (m_sleepCounter > 0)
     {
-        // std::cout << "I am at " << getX() << ", " << getY() << " now." << std::endl;
-        // std::cout << "I have " << sleepCounter() << " ticks of sleep remaining" << std::endl;
-        setSleep(sleepCounter() - 1);
+        m_sleepCounter--;
         return false;
     }
     
@@ -106,7 +104,7 @@ bool Insect::attemptAct() // Checks if the insect is dead or stunned
     return true;
 }
 
-bool Insect::bite()
+bool Insect::bite() // Bite a random insect at current square
 {
     StudentWorld* world = getWorld();
     bool didDamage = world->damageRand(getX(), getY(), m_damage, this);
@@ -120,14 +118,13 @@ bool Insect::eat()
     return consumeFood(m_hunger);
 }
 
-bool Insect::move(bool random)
+bool Insect::move(bool random) // Moves according to self's inbuilt walk counter (if random)
 {
-    if (getWalkCounter() == 0 && random)
+    if (m_walkCounter == 0 && random)
     {
-        // std::cout << "I picked a new direction" << std::endl;
         newDir();
         int distance = randInt(2, 10);
-        setWalkCounter(distance);
+        m_walkCounter = distance;
     }
     
     StudentWorld* world = getWorld();
@@ -135,12 +132,10 @@ bool Insect::move(bool random)
     int newY = getY();
     
     frontGrid(newX, newY);
-    // std::cout << "I attempt to move from" << getX() << ", " << getY() << " to " << newX << ", " << newY << std::endl;
     
     if (world->isBlocked(newX, newY))
     {
-        // std::cout << "I am blocked" << std::endl;
-        setWalkCounter(0);
+        m_walkCounter = 0;
         return false;
     }
     
@@ -148,13 +143,12 @@ bool Insect::move(bool random)
     moveTo(newX, newY);
     
     if (random)
-        setWalkCounter(getWalkCounter() - 1);
+        m_walkCounter--;
     
     return true;
-    // std::cout << "I moved" << std::endl;
 }
 
-void Insect::newDir()
+void Insect::newDir() // Gets a random new direction
 {
     int dir = randInt(1, 4);
     switch (dir)
@@ -176,7 +170,7 @@ void Insect::newDir()
     }
 }
 
-void Insect::frontGrid(int &x, int &y)
+void Insect::frontGrid(int &x, int &y) // Find the coordinate of the grid in front of self
 {
     switch (getDirection())
     {
@@ -197,7 +191,7 @@ void Insect::frontGrid(int &x, int &y)
     }
 }
 
-void Insect::dropFood(int amount)
+void Insect::dropFood(int amount) // Add food to current grid
 {
     if (amount > 0)
         getWorld()->stackFood(getX(), getY(), amount);
@@ -210,7 +204,6 @@ void Insect::dropFood(int amount)
 
 void BabyGrasshopper::doSomething()
 {
-    // std::cout << "I am prompted to do something" << std::endl;
     if (!attemptAct() || mature())
         return;
  
@@ -224,7 +217,7 @@ void BabyGrasshopper::doSomething()
     setSleep(2);
 }
 
-bool BabyGrasshopper::mature()
+bool BabyGrasshopper::mature() // Kills self and place an adultgrasshopper
 {
     if (getHP() >= 1600)
     {
@@ -247,7 +240,7 @@ void AdultGrasshopper::getBitten(int damage)
     if (randInt(0, 1) == 1)
     {
         // std::cout << "FITE ME!" << std::endl;
-        getWorld()->damageRand(getX(), getY(), getDamage(), this);
+        bite();
     }
 }
 
@@ -281,11 +274,9 @@ void AdultGrasshopper::doSomething()
     }
     
     setSleep(2);
-    return;
-    
 }
 
-bool AdultGrasshopper::jump()
+bool AdultGrasshopper::jump() // Hops ro a random grid within radius 10
 {
     StudentWorld* world = getWorld();
     int num = 0;
@@ -310,7 +301,6 @@ bool AdultGrasshopper::jump()
     }
    
     return false;
-    
 }
 
 
@@ -321,7 +311,6 @@ void Ant::getBitten(int damage)
 {
     Insect::getBitten(damage);
     m_bitten = true;
-    // std::cout << "I was bit!" << std::endl;
 }
 
 void Ant::doSomething()
@@ -345,45 +334,49 @@ void Ant::doSomething()
         
         switch(cmd.opcode)
         {
+            case Compiler::invalid:
+            case Compiler::label:
+                break;
+                
             case Compiler::rotateClockwise:
                 switch (getDirection())
                 {
-                    case (up):
+                    case up:
                         setDirection(right);
                         break;
-                    case (right):
+                    case right:
                         setDirection(down);
                         break;
-                    case (down):
+                    case down:
                         setDirection(left);
                         break;
-                    case (left):
+                    case left:
                         setDirection(up);
                         break;
-                    case (none):
+                    case none:
                         break;
                 }
-                break;
+                return;
                 
             case Compiler::rotateCounterClockwise:
                 switch (getDirection())
                 {
-                    case (up):
+                    case up:
                         setDirection(left);
                         break;
-                    case (right):
+                    case right:
                         setDirection(up);
                         break;
-                    case (down):
+                    case down:
                         setDirection(right);
                         break;
-                    case (left):
+                    case left:
                         setDirection(down);
                         break;
-                    case (none):
+                    case none:
                         break;
                 }
-                break;
+                return;
                 
             case Compiler::moveForward:
                 if (move(false))
@@ -427,12 +420,12 @@ void Ant::doSomething()
             
             case Compiler::faceRandomDirection:
                 newDir();
-                break;
+                return;
             
             case Compiler::generateRandomNumber:
             {
                 int operand = stoi(cmd.operand1);
-                m_lastRand = (operand == 0) ? 0 : randInt(0, operand);
+                m_lastRand = (operand == 0) ? 0 : randInt(0, operand - 1);
                 return;
             }
                 
@@ -451,7 +444,7 @@ void Ant::doSomething()
     
 }
 
-bool Ant::canExecute(std::string op)
+bool Ant::canExecute(std::string op) // Returns true if the if statement evaluates to true
 {
     switch(stoi(op))
     {
