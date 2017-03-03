@@ -353,6 +353,7 @@ public:
     Insect(int ImageID, int startX, int startY, int type, int hp, int damage, int hunger, int drop, int faction, StudentWorld* world): Mortal(ImageID, startX, startY, none, 1, type, hp, false, faction, world), m_walkCounter(0), m_sleepCounter(0), m_damage(damage), m_hunger(hunger), m_drop(drop), m_stunned(false)
     {
         newDir();
+        m_walkCounter = randInt(2, 10);
     }
     
     virtual ~Insect()

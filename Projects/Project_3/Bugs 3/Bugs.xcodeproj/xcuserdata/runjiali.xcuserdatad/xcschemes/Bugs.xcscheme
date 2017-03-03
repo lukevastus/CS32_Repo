@@ -79,7 +79,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/runjiali/Library/Developer/Xcode/DerivedData/Bugs-gvwyscfmcackavfjhdxecqwvwftq/Build/Products/Debug/USCAnt.bug"
+            argument = "/Users/runjiali/Library/Developer/Xcode/DerivedData/Bugs-gvwyscfmcackavfjhdxecqwvwftq/Build/Products/Debug/LukeAnt.bug"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
