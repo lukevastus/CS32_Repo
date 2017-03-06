@@ -1,0 +1,15 @@
+Problem 2: In the member function int Sequence<ItemType>::insert(const ItemType& value), there is an operation “value > p-m_value” which requires a valid overloaded “>” operator for ItemType in order to execute the comparison. However, there is no overloaded “>” operator associated to the Complex class, thus this operation cannot be executed. 
+
+Problem 3b: Each MenuItem object in the tree cannot access its parent MenuItem. Therefore, it is unable to retrieve the name of its parent,and the path needs to be passed in as a parameter.
+
+Problem 4a: The time complexity is O(N^3) because there are three nested for loops, each executes N times 
+
+Problem 4b: The time complexity is still O(N^3). The total number of loop iterations is 1 * N + 2 * N + 3 * N + … + N * N = (1+N)N/2 * N which still evaluates to N^3.
+
+Problem 5a: The first for loop executes N times. In each of its iterations, it takes O(N) to get node and O(N) to insert node and O(1) to do everything else, so in total it’s complexity s O(N^2). The copy constructor visits all N nodes so it is O(N). The second for loop executes N times. In each of its iterations, it takes O(N) to get node and O(N) to insert node and O(1) to do everything else, so in total its O(N^2). The swap function takes O(1).
+
+Overall, the complexity is O(N^2).
+
+Problem 5b: The first for loop executes N times, while each of its iterations has complexity of O(1). Its total complexity is therefore O(N). Same for the second for loop. The swap function takes O(1).
+
+Overall, the complexity is O(N), which is better.
