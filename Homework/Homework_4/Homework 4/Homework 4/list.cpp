@@ -6,7 +6,7 @@
 //  Copyright © 2017 Runjia Li. All rights reserved.
 //
 
-/*#include <iostream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -47,18 +47,17 @@ CompoundMenuItem::~CompoundMenuItem()
 {
     for (int k = 0; k < m_menuItems.size(); k++)
         delete m_menuItems[k];
-}*/
+}
 
 void listAll(const MenuItem* m, string path) // two-parameter overload
 {
     if (m == nullptr)
         return;
     
-    string s = "";
-    if (m->name() != "")
+    if (path != "")
     {
-        cout << path + m->name() << endl;
-        s = "/";
+        cout << path << endl;
+        path += "/";
     }
     
     if (m->menuItems() != nullptr)
@@ -66,13 +65,13 @@ void listAll(const MenuItem* m, string path) // two-parameter overload
         vector<MenuItem*>::const_iterator it = m->menuItems()->begin();
         while (it != m->menuItems()->end())
         {
-            listAll(*it, path + m->name() + s);
+            listAll(*it, path + (*it)->name());
             it++;
         }
     }
 }
 
-/*void listAll(const MenuItem* m)  // one-parameter overload
+void listAll(const MenuItem* m)  // one-parameter overload
 {
     if (m != NULL)
         listAll(m, "");
@@ -96,5 +95,5 @@ int main()
     cm3->add(cm2);
     listAll(cm3);
     delete cm3;
-}*/
+}
 
