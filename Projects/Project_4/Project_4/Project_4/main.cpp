@@ -57,4 +57,13 @@ int main()
     StreetSegment s;
     m.getSegment(4, s);
     assert(s.streetName == "13th Helena Drive" && s.segment.start.longitudeText == "-118.4798135");
+    
+    AttractionMapper am;
+    am.init(m);
+    GeoCoord gc;
+    assert(am.getGeoCoord("Northwest Campus Auditorium", gc) && gc.latitudeText == "34.0718231");
+    assert(am.getGeoCoord("Sproul Landing", gc) && gc.longitudeText == "-118.4505665");
+
+    
+    cout << "All tests passed" << endl;
 }

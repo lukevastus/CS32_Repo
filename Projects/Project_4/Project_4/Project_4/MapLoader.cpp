@@ -1,8 +1,8 @@
-#include "provided.h"
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "provided.h"
 using namespace std;
 
 class MapLoaderImpl
@@ -81,7 +81,7 @@ bool MapLoaderImpl::getSegment(size_t segNum, StreetSegment &seg) const
         return false;
     
     seg = *(m_segs[segNum]);
-	return true;  // This compiles, but may not be correct
+	return true;
 }
 
 //******************** MapLoader functions ************************************

@@ -10,6 +10,7 @@
 
 #ifndef MyMap_h
 #define MyMap_h
+#include <iostream>
 
 template<typename KeyType, typename ValueType>
 class MyMap
@@ -147,6 +148,7 @@ void MyMap<KeyType, ValueType>::deleteSubtree(Node* root)
         return;
     deleteSubtree(root->left);
     deleteSubtree(root->right);
+    KeyType key = root->n_key;
     delete root;
     m_size--;
 }

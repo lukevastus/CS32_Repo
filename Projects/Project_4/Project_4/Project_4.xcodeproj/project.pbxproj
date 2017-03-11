@@ -63,11 +63,11 @@
 		2156F80F1E711C7D00A4F719 /* Project_4 */ = {
 			isa = PBXGroup;
 			children = (
-				21EA7D261E7388900009F774 /* AttractionMapper.cpp */,
 				2156F81A1E734CB900A4F719 /* provided.h */,
-				2156F81E1E734CB900A4F719 /* MapLoader.cpp */,
-				2156F8101E711C7D00A4F719 /* main.cpp */,
 				2156F8171E711DAA00A4F719 /* MyMap.h */,
+				2156F81E1E734CB900A4F719 /* MapLoader.cpp */,
+				21EA7D261E7388900009F774 /* AttractionMapper.cpp */,
+				2156F8101E711C7D00A4F719 /* main.cpp */,
 			);
 			path = Project_4;
 			sourceTree = "<group>";
