@@ -11,6 +11,7 @@
 		2156F8221E734CB900A4F719 /* MapLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2156F81E1E734CB900A4F719 /* MapLoader.cpp */; };
 		21EA7D271E7388900009F774 /* AttractionMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21EA7D261E7388900009F774 /* AttractionMapper.cpp */; };
 		21EA7D291E73B7FD0009F774 /* SegmentMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21EA7D281E73B7FD0009F774 /* SegmentMapper.cpp */; };
+		21EA7D2B1E73E36C0009F774 /* Navigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21EA7D2A1E73E36C0009F774 /* Navigator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,7 @@
 		2156F81E1E734CB900A4F719 /* MapLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapLoader.cpp; sourceTree = "<group>"; };
 		21EA7D261E7388900009F774 /* AttractionMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttractionMapper.cpp; sourceTree = "<group>"; };
 		21EA7D281E73B7FD0009F774 /* SegmentMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SegmentMapper.cpp; sourceTree = "<group>"; };
+		21EA7D2A1E73E36C0009F774 /* Navigator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Navigator.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				2156F81E1E734CB900A4F719 /* MapLoader.cpp */,
 				21EA7D261E7388900009F774 /* AttractionMapper.cpp */,
 				21EA7D281E73B7FD0009F774 /* SegmentMapper.cpp */,
+				21EA7D2A1E73E36C0009F774 /* Navigator.cpp */,
 				2156F8101E711C7D00A4F719 /* main.cpp */,
 			);
 			path = Project_4;
@@ -131,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21EA7D2B1E73E36C0009F774 /* Navigator.cpp in Sources */,
 				2156F8111E711C7D00A4F719 /* main.cpp in Sources */,
 				2156F8221E734CB900A4F719 /* MapLoader.cpp in Sources */,
 				21EA7D291E73B7FD0009F774 /* SegmentMapper.cpp in Sources */,

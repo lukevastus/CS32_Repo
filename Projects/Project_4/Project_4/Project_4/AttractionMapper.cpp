@@ -22,7 +22,7 @@ AttractionMapperImpl::AttractionMapperImpl()
 
 AttractionMapperImpl::~AttractionMapperImpl()
 {
-    
+
 }
 
 void AttractionMapperImpl::init(const MapLoader& ml)

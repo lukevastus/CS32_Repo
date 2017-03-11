@@ -68,11 +68,11 @@ void SegmentMapperImpl::init(const MapLoader& ml)
 vector<StreetSegment> SegmentMapperImpl::getSegments(const GeoCoord& gc) const
 {
     vector<StreetSegment> segment;
-    const vector<StreetSegment*>* segPtrs = m_map.find(gc);
-    if (segPtrs != nullptr)
+    const vector<StreetSegment*>* vecPtr = m_map.find(gc);
+    if (vecPtr != nullptr)
     {
-        for (size_t i = 0; i < segPtrs->size(); i++)
-            segment.push_back(*(*segPtrs)[i]);
+        for (size_t i = 0; i < vecPtr->size(); i++)
+            segment.push_back(*(*vecPtr)[i]);
     }
     return segment;
 }
