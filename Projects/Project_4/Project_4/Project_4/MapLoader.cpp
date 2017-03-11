@@ -38,7 +38,6 @@ bool MapLoaderImpl::load(string mapFile)
     string name;
     while (getline(infile, name))
     {
-        
         string slat, slon, elat, elon;
         getline(infile, slat, ',');
         infile.ignore();

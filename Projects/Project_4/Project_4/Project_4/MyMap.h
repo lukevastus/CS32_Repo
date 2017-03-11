@@ -125,20 +125,22 @@ const ValueType* MyMap<KeyType, ValueType>::find(const KeyType& key) const
         return nullptr;
     
     Node* curNode = m_root;
-    while (curNode->n_key != key)
+    while (true)
     {
+        if (key == curNode->n_key)
+        {
+            ValueType* valuePtr = &(curNode->n_value);
+            return valuePtr;
+        }
+            
         if (key < curNode->n_key)
             curNode = curNode->left;
             
-        else if (key > curNode->n_key)
-            curNode = curNode->right;
+        else curNode = curNode->right;
         
         if (curNode == nullptr)
             return nullptr;
     }
-    
-    ValueType* valuePtr = &(curNode->n_value);
-    return valuePtr;
 }
 
 template<typename KeyType, typename ValueType>
