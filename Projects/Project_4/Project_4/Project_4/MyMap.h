@@ -150,7 +150,6 @@ void MyMap<KeyType, ValueType>::deleteSubtree(Node* root)
         return;
     deleteSubtree(root->left);
     deleteSubtree(root->right);
-    KeyType key = root->n_key;
     delete root;
     m_size--;
 }

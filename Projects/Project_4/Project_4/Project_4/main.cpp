@@ -87,7 +87,7 @@ void testMaps()
     sm.init(m);
     chrono::high_resolution_clock::time_point t6 = chrono::high_resolution_clock::now();
     cout << "Time to init SegmentMapper:" << chrono::duration_cast<chrono::milliseconds>(t6 - t5).count() << "ms" << endl;
-    GeoCoord lookMeUp("34.0572000", "-118.4417620");
+    GeoCoord lookMeUp("34.0692072", "-118.4066994");
     std::vector<StreetSegment> vecOfAssociatedSegs(sm.getSegments(lookMeUp));
     if (vecOfAssociatedSegs.empty())
     {

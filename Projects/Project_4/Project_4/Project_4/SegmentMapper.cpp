@@ -11,8 +11,9 @@ public:
 	void init(const MapLoader& ml);
 	vector<StreetSegment> getSegments(const GeoCoord& gc) const;
 private:
-    MyMap<GeoCoord, vector<StreetSegment>> m_map;
-    void processCoord(GeoCoord gc, StreetSegment seg);
+    MyMap<GeoCoord, vector<StreetSegment*>> m_map;
+    vector<StreetSegment*> m_segPtrs;
+    void processCoord(GeoCoord gc, StreetSegment* seg);
 };
 
 bool operator< (const GeoCoord& g1, const GeoCoord& g2)
@@ -32,12 +33,14 @@ SegmentMapperImpl::SegmentMapperImpl()
 
 SegmentMapperImpl::~SegmentMapperImpl()
 {
-    
+    size_t size = m_segPtrs.size();
+    for (size_t i = 0; i < size; i++)
+        delete m_segPtrs[i];
 }
 
-void SegmentMapperImpl::processCoord(GeoCoord gc, StreetSegment seg)
+void SegmentMapperImpl::processCoord(GeoCoord gc, StreetSegment* seg)
 {
-    vector<StreetSegment>* vecPtr = m_map.find(gc);
+    vector<StreetSegment*>* vecPtr = m_map.find(gc);
     if (vecPtr != nullptr)
         vecPtr->push_back(seg);
     else m_map.associate(gc, {seg});
@@ -49,16 +52,29 @@ void SegmentMapperImpl::init(const MapLoader& ml)
     {
         StreetSegment seg;
         ml.getSegment(i, seg);
-        processCoord(seg.segment.start, seg);
-        processCoord(seg.segment.end, seg);
+        StreetSegment* segPtr = new StreetSegment(seg);
+        m_segPtrs.push_back(segPtr);
+        processCoord(seg.segment.start, segPtr);
+        processCoord(seg.segment.end, segPtr);
         for (size_t j = 0; j < seg.attractions.size(); j++)
-            processCoord(seg.attractions[j].geocoordinates, seg);
+        {
+            GeoCoord attCoord = seg.attractions[j].geocoordinates;
+            if (!(attCoord == seg.segment.start || attCoord == seg.segment.end))
+                processCoord(attCoord, segPtr);
+        }
     }
 }
 
 vector<StreetSegment> SegmentMapperImpl::getSegments(const GeoCoord& gc) const
 {
-	return *m_map.find(gc);  // This compiles, but may not be correct
+    vector<StreetSegment> segment;
+    const vector<StreetSegment*>* segPtrs = m_map.find(gc);
+    if (segPtrs != nullptr)
+    {
+        for (size_t i = 0; i < segPtrs->size(); i++)
+            segment.push_back(*(*segPtrs)[i]);
+    }
+    return segment;
 }
 
 //******************** SegmentMapper functions ********************************
