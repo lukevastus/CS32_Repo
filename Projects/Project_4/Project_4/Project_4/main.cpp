@@ -103,13 +103,34 @@ void testMaps()
         s.segment.end.longitudeText << endl; cout << "This segment has " << s.attractions.size() <<
         " attractions on it." << endl;
     }
-    
     cout << "All tests passed" << endl;
+}
+
+void testNav()
+{
+    Navigator nv;
+    nv.loadMapData("/Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/mapdata.txt");
+    vector<NavSegment> segs;
+    nv.navigate("Los Angeles Fire Department Fire Station 92", "UCLA Police Department", segs);
+    double distance = 0;
+    for (size_t i = 0; i < segs.size(); i++)
+    {
+        if (segs[i].m_command == NavSegment::PROCEED)
+        {
+            distance += segs[i].m_distance;
+            cout << "Proceed " << segs[i].m_direction << " " << segs[i].m_distance << " km on " << segs[i].m_streetName << endl;
+        }
+        else
+            cout << "Turn " << segs[i].m_direction << " onto " << segs[i].m_streetName << endl;
+    }
+    cout << distance <<" km in total." << endl;
+    cout << "Passed" << endl;
 }
 
 
 int main()
 {
-    testMyMap();
-    testMaps();
+    // testMyMap();
+    // testMaps();
+    testNav();
 }
