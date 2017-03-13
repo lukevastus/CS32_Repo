@@ -15,6 +15,12 @@ private:
     MyMap<string, GeoCoord> m_map;
 };
 
+void convertToLower(string& input)
+{
+    for (size_t i= 0; i < input.size(); i++)
+        input[i] = (input[i] <= 'Z' && input[i] >= 'A') ? (input[i] - ('Z' - 'z')) : input[i];
+}
+
 AttractionMapperImpl::AttractionMapperImpl()
 {
     
@@ -32,12 +38,16 @@ void AttractionMapperImpl::init(const MapLoader& ml)
         StreetSegment seg;
         ml.getSegment(i, seg);
         for (size_t j = 0; j < seg.attractions.size(); j++)
+        {
+            convertToLower(seg.attractions[j].name);
             m_map.associate(seg.attractions[j].name, seg.attractions[j].geocoordinates);
+        }
     }
 }
 
 bool AttractionMapperImpl::getGeoCoord(string attraction, GeoCoord& gc) const
 {
+    convertToLower(attraction);
     const GeoCoord* temp = m_map.find(attraction);
     if (temp != nullptr)
     {

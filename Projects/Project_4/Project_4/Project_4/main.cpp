@@ -111,7 +111,7 @@ void testNav()
     Navigator nv;
     nv.loadMapData("/Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/mapdata.txt");
     vector<NavSegment> segs;
-    nv.navigate("Los Angeles Fire Department Fire Station 92", "UCLA Police Department", segs);
+    nv.navigate("engineering iv", "dior", segs);
     double distance = 0;
     for (size_t i = 0; i < segs.size(); i++)
     {
@@ -126,7 +126,6 @@ void testNav()
     cout << distance <<" km in total." << endl;
     cout << "Passed" << endl;
 }
-
 
 int main()
 {

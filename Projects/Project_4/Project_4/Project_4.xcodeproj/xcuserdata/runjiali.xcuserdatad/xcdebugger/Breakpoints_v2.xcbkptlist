@@ -30,9 +30,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "main()"
-            landmarkType = "7">
+            endingLineNumber = "136">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,7 +40,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/MapLoader.cpp"
-            timestampString = "510900648.382239"
+            timestampString = "511056573.034225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
@@ -186,11 +184,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/AttractionMapper.cpp"
-            timestampString = "510890790.415245"
+            timestampString = "511046580.770378"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
             landmarkName = "AttractionMapperImpl::getGeoCoord(string attraction, GeoCoord&amp; gc)"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +200,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/AttractionMapper.cpp"
-            timestampString = "510890792.608658"
+            timestampString = "511046580.770378"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
             landmarkName = "AttractionMapperImpl::getGeoCoord(string attraction, GeoCoord&amp; gc)"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,11 +216,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/MapLoader.cpp"
-            timestampString = "510902322.877152"
+            timestampString = "511056573.034225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "MapLoaderImpl::load(string mapFile)"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,11 +296,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510971219.842815"
+            timestampString = "511047522.581934"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "class NavigatorImpl"
             landmarkType = "3">
          </BreakpointContent>
@@ -314,151 +312,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "211"
-            endingLineNumber = "211"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
-            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "214"
@@ -474,11 +328,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048873.569161"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
             landmarkType = "5">
          </BreakpointContent>
@@ -490,12 +360,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
-            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -506,12 +376,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -522,28 +392,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510980996.844705"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "class NavigatorImpl"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983662.088789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
-            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -554,7 +408,87 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510983656.44346"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "152"
@@ -570,11 +504,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510984788.962034"
+            timestampString = "511048491.543279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
             landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
             landmarkType = "5">
          </BreakpointContent>
@@ -586,13 +520,217 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Project_4/Navigator.cpp"
-            timestampString = "510984911.414195"
+            timestampString = "511047522.581934"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "class NavigatorImpl"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "NavigatorImpl::buildRoute(const GeoCoord&amp; current, const MyMap&lt;GeoCoord, GeoCoord&gt;&amp; map, vector&lt;NavSegment&gt;&amp; vec)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048873.569161"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511048491.543279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
+            landmarkName = "NavigatorImpl::navigate(string start, string end, vector&lt;NavSegment&gt; &amp;directions)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511056204.287289"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "NavigatorImpl::loadMapData(string mapFile)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/Navigator.cpp"
+            timestampString = "511056205.50306"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "NavigatorImpl::loadMapData(string mapFile)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Project_4/MyMap.h"
+            timestampString = "511056750.461596"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "associate(const KeyType&amp; key, const ValueType&amp; value)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;GeoCoord, double&gt;::associate(GeoCoord const&amp;, double const&amp;)"
+                  moduleName = "Project_4"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/MyMap.h"
+                  timestampString = "511056761.907499"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "107">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;GeoCoord, bool&gt;::associate(GeoCoord const&amp;, bool const&amp;)"
+                  moduleName = "Project_4"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/MyMap.h"
+                  timestampString = "511056761.908348"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "107">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;GeoCoord, GeoCoord&gt;::associate(GeoCoord const&amp;, GeoCoord const&amp;)"
+                  moduleName = "Project_4"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/MyMap.h"
+                  timestampString = "511056761.908828"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "107">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, double&gt;::associate(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, double const&amp;)"
+                  moduleName = "Project_4"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/MyMap.h"
+                  timestampString = "511056761.909534"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "1539">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;GeoCoord, std::__1::vector&lt;StreetSegment*, std::__1::allocator&lt;StreetSegment*&gt; &gt; &gt;::associate(GeoCoord const&amp;, std::__1::vector&lt;StreetSegment*, std::__1::allocator&lt;StreetSegment*&gt; &gt; const&amp;)"
+                  moduleName = "Project_4"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/MyMap.h"
+                  timestampString = "511056761.909979"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "110">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, GeoCoord&gt;::associate(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, GeoCoord const&amp;)"
+                  moduleName = "Project_4"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/MyMap.h"
+                  timestampString = "511056761.910388"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "1539">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

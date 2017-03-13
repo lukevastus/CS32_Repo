@@ -66,6 +66,7 @@ bool MapLoaderImpl::load(string mapFile)
         }
         m_segs.push_back(seg);
     }
+    cout << m_segs.size() << endl;
     return true;
 }
 

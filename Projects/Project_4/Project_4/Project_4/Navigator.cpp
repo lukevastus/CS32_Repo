@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <chrono>
+#include <iostream>
 #include "provided.h"
 #include "MyMap.h"
 #include "support.h"
@@ -112,7 +114,6 @@ bool NavigatorImpl::buildStreet(const GeoCoord& g1, const GeoCoord& g2, StreetSe
     return false;
 }
 
-
 bool NavigatorImpl::buildRoute(const GeoCoord& current, const MyMap<GeoCoord, GeoCoord>& map, vector<NavSegment>& vec) const
 {
     stack<GeoCoord> coords;
@@ -147,8 +148,8 @@ bool NavigatorImpl::buildRoute(const GeoCoord& current, const MyMap<GeoCoord, Ge
             }
         }
         route.push_back(curSeg);
-        
     }
+    
     vec = route;
     return true;
 }
@@ -164,6 +165,8 @@ bool NavigatorImpl::loadMapData(string mapFile)
 
 NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &directions) const
 {
+    chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
+
     GeoCoord startCoord, endCoord;
     if (!m_am.getGeoCoord(start, startCoord))
         return NAV_BAD_SOURCE;
@@ -171,9 +174,9 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
         return NAV_BAD_DESTINATION;
     
     MyMap<GeoCoord, double> sScore; // Cost to get to GeoCoord from start
-    MyMap<GeoCoord, double> eScore; // Distance from GeoCoord to end
+    MyMap<GeoCoord, double> eScore; // sScore + distance from GeoCoord to end
     MyMap<GeoCoord, GeoCoord> prevCoord; // Records where it came from
-    vector<GeoCoord> isEvaluated; // Records whether a GeoCoord has been visited
+    MyMap<GeoCoord, bool> isEvaluated; // Records whether a GeoCoord has been visited
     vector<GeoCoord> watchList; // GeoCoords being queued up to get evaluated
     
     sScore.associate(startCoord, 0);
@@ -182,7 +185,7 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
     
     while (!watchList.empty())
     {
-        // Find the GeoCoord on watchlist closest to end
+        // Find the GeoCoord on watchlist closest to destination
         size_t minIndex = 0;
         double minCost = *eScore.find(watchList[0]);
         for (size_t i = 0; i < watchList.size(); i++)
@@ -191,29 +194,33 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
             minCost = (curCost < minCost) ? curCost : minCost;
             minIndex = (curCost < minCost) ? i : minIndex;
         }
-    
+        
+        // Build the route when arriving at destination
         if (watchList[minIndex] == endCoord)
         {
             if (!buildRoute(watchList[minIndex], prevCoord, directions))
                 return NAV_NO_ROUTE;
+            chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
+            cout << "Time to find route: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
             return NAV_SUCCESS;
         }
         
         // Visit and evaluate the GeoCoord selected in previous step
         GeoCoord curCoord = watchList[minIndex];
         watchList.erase(watchList.begin() + minIndex);
-        isEvaluated.push_back(curCoord);
+        isEvaluated.associate(curCoord, true);
         
         // Push each of its neighbors to the watchlist if they haven't been visited
         vector<GeoCoord> neighbors = getNeighbors(curCoord);
         for (size_t i = 0; i < neighbors.size(); i++)
         {
-            if (!isInVector(neighbors[i], isEvaluated))
+            if (isEvaluated.find(neighbors[i]) == nullptr)
             {
                 double curScore = *sScore.find(curCoord) + distanceEarthKM(curCoord, neighbors[i]);
                 if (!isInVector(neighbors[i], watchList))
                     watchList.push_back(neighbors[i]);
-                else if (curScore >= *sScore.find(neighbors[i])) // If it costs more to visit the neighbor in the new route, then it is not the best route
+                else if (curScore >= *sScore.find(neighbors[i]))
+                    // If it costs more to visit the neighbor in the new route, then it is not the best route
                     continue;
                 
                 prevCoord.associate(neighbors[i], curCoord);
