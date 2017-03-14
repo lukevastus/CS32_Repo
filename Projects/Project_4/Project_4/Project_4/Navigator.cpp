@@ -2,7 +2,6 @@
 #include <vector>
 #include <stack>
 #include <chrono>
-#include <iostream>
 #include "provided.h"
 #include "MyMap.h"
 #include "support.h"
@@ -137,7 +136,7 @@ bool NavigatorImpl::buildRoute(const GeoCoord& current, const MyMap<GeoCoord, Ge
         StreetSegment s;
         if (!buildStreet(g1, g2, s))
             return false;
-        NavSegment curSeg(getDirection(g1, g2), s.streetName, distanceEarthKM(g1, g2), GeoSegment(g1, g2));
+        NavSegment curSeg(getDirection(g1, g2), s.streetName, distanceEarthMiles(g1, g2), GeoSegment(g1, g2));
         if (!route.empty())
         {
             NavSegment prevSeg = route[route.size() - 1];
@@ -177,28 +176,23 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
     MyMap<GeoCoord, double> eScore; // sScore + distance from GeoCoord to end
     MyMap<GeoCoord, GeoCoord> prevCoord; // Records where it came from
     MyMap<GeoCoord, bool> isEvaluated; // Records whether a GeoCoord has been visited
-    vector<GeoCoord> watchList; // GeoCoords being queued up to get evaluated
+    WatchList wl; // A minheap containing GeoCoords to be evaluated
     
     sScore.associate(startCoord, 0);
-    eScore.associate(startCoord, distanceEarthKM(startCoord, endCoord));
-    watchList.push_back(startCoord);
+    eScore.associate(startCoord, distanceEarthMiles(startCoord, endCoord));
+    /*isEvaluated.associate(startCoord, true);*/
+    wl.insert(CoordScore(startCoord, 0));
     
-    while (!watchList.empty())
+    while (!wl.empty())
     {
-        // Find the GeoCoord on watchlist closest to destination
-        size_t minIndex = 0;
-        double minCost = *eScore.find(watchList[0]);
-        for (size_t i = 0; i < watchList.size(); i++)
+        GeoCoord curCoord;
+        // Extract the best coordinate from the watchlist
+        if (!wl.extract(curCoord))
+            break;
+        if (curCoord == endCoord)
         {
-            double curCost = *eScore.find(watchList[i]);
-            minCost = (curCost < minCost) ? curCost : minCost;
-            minIndex = (curCost < minCost) ? i : minIndex;
-        }
-        
-        // Build the route when arriving at destination
-        if (watchList[minIndex] == endCoord)
-        {
-            if (!buildRoute(watchList[minIndex], prevCoord, directions))
+            // Build the route when arriving at destination
+            if (!buildRoute(curCoord, prevCoord, directions))
                 return NAV_NO_ROUTE;
             chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
             cout << "Time to find route: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
@@ -206,8 +200,6 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
         }
         
         // Visit and evaluate the GeoCoord selected in previous step
-        GeoCoord curCoord = watchList[minIndex];
-        watchList.erase(watchList.begin() + minIndex);
         isEvaluated.associate(curCoord, true);
         
         // Push each of its neighbors to the watchlist if they haven't been visited
@@ -216,20 +208,19 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
         {
             if (isEvaluated.find(neighbors[i]) == nullptr)
             {
-                double curScore = *sScore.find(curCoord) + distanceEarthKM(curCoord, neighbors[i]);
-                if (!isInVector(neighbors[i], watchList))
-                    watchList.push_back(neighbors[i]);
-                else if (curScore >= *sScore.find(neighbors[i]))
-                    // If it costs more to visit the neighbor in the new route, then it is not the best route
+                double curScore = *sScore.find(curCoord) + distanceEarthMiles(curCoord, neighbors[i]);
+                
+                // If there already has a better route, skip the coordinate
+                if (sScore.find(neighbors[i]) != nullptr && curScore > *sScore.find(neighbors[i]))
                     continue;
                 
+                wl.insert(CoordScore(neighbors[i], curScore + distanceEarthMiles(neighbors[i], endCoord)));
                 prevCoord.associate(neighbors[i], curCoord);
                 sScore.associate(neighbors[i], curScore);
-                eScore.associate(neighbors[i], curScore + distanceEarthKM(neighbors[i], endCoord));
+                eScore.associate(neighbors[i], curScore + distanceEarthMiles(neighbors[i], endCoord));
             }
         }
     }
-
 	return NAV_NO_ROUTE;
 }
 

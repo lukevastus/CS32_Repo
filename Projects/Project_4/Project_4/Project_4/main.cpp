@@ -12,6 +12,7 @@
 #include <chrono>
 #include "MyMap.h"
 #include "provided.h"
+#include "support.h"
 using namespace std;
 
 void testMyMap()
@@ -111,8 +112,9 @@ void testNav()
     Navigator nv;
     nv.loadMapData("/Users/runjiali/Documents/CS32/CS32_Repo/Projects/Project_4/Project_4/Project_4/mapdata.txt");
     vector<NavSegment> segs;
-    nv.navigate("engineering iv", "dior", segs);
+    nv.navigate("de neve plaza", "gucci", segs);
     double distance = 0;
+    string street = segs[0].m_streetName;
     for (size_t i = 0; i < segs.size(); i++)
     {
         if (segs[i].m_command == NavSegment::PROCEED)
@@ -123,7 +125,7 @@ void testNav()
         else
             cout << "Turn " << segs[i].m_direction << " onto " << segs[i].m_streetName << endl;
     }
-    cout << distance <<" km in total." << endl;
+    cout << distance <<" miles in total." << endl;
     cout << "Passed" << endl;
 }
 
@@ -132,4 +134,19 @@ int main()
     // testMyMap();
     // testMaps();
     testNav();
+    /*WatchList wl;
+    GeoCoord g;
+    wl.insert(CoordScore(GeoCoord("10", "10"), 10));
+    wl.insert(CoordScore(GeoCoord("12", "12"), 20));
+    wl.insert(CoordScore(GeoCoord("8", "8"), 1));
+    assert(wl.extract(g) && g == GeoCoord("8", "8"));
+    wl.insert(CoordScore(GeoCoord("15", "15"), 322));
+    assert(wl.extract(g) && g == GeoCoord("10", "10"));
+    wl.insert(CoordScore(GeoCoord("22", "22"), 22));
+    assert(wl.extract(g) && g == GeoCoord("12", "12"));
+    wl.insert(CoordScore(GeoCoord("23", "23"), 23));
+    wl.insert(CoordScore(GeoCoord("25", "25"), 25));
+    wl.insert(CoordScore(GeoCoord("1", "1"), 1));
+
+    cout << "Passed watchlist test" << endl;*/
 }
