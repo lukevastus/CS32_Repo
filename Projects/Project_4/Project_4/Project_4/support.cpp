@@ -56,10 +56,10 @@ bool WatchList::extract(GeoCoord& gc)
             m_list[0] = m_list[m_list.size() - 1];
         m_list.pop_back();
         size_t loc = 0;
-        while ((loc * 2 + 1) <= (m_list.size() - 1))
+        while ((loc * 2 + 2) <= m_list.size())
         {
             size_t target = loc * 2 + 1;
-            if ((loc * 2 + 2) <= (m_list.size() - 1))
+            if ((loc * 2 + 3) <= m_list.size())
                 target = m_list[loc * 2 + 1].score < m_list[loc * 2 + 2].score ? (loc * 2 + 1) : (loc * 2 + 2);
             if (m_list[target].score < m_list[loc].score)
             {

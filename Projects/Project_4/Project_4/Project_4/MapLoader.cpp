@@ -40,7 +40,8 @@ bool MapLoaderImpl::load(string mapFile)
     {
         string slat, slon, elat, elon;
         getline(infile, slat, ',');
-        infile.ignore();
+        if (infile.peek() == ' ') // Zero or one spaces between coordinates
+            infile.ignore();
         getline(infile, slon, ' ');
         getline(infile, elat, ',');
         getline(infile, elon);
@@ -56,7 +57,8 @@ bool MapLoaderImpl::load(string mapFile)
             string attr, alat, alon;
             getline(infile, attr, '|');
             getline(infile, alat, ',');
-            infile.ignore();
+            if (infile.peek() == ' ') // Zero or one spaces between coordinates
+                infile.ignore();
             getline(infile, alon);
             Attraction at;
             at.name = attr;

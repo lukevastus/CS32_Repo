@@ -10,7 +10,6 @@
 
 #ifndef MyMap_h
 #define MyMap_h
-#include <iostream>
 
 template<typename KeyType, typename ValueType>
 class MyMap

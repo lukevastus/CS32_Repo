@@ -25,7 +25,7 @@ struct CoordScore
     double score;
 };
 
-class WatchList
+class WatchList // A priority queue for holding GeoCoord-associated cost score data
 {
 public:
     WatchList();

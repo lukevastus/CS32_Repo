@@ -1,7 +1,6 @@
 #include <string>
 #include <vector>
 #include <stack>
-#include <chrono>
 #include "provided.h"
 #include "MyMap.h"
 #include "support.h"
@@ -164,8 +163,6 @@ bool NavigatorImpl::loadMapData(string mapFile)
 
 NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &directions) const
 {
-    chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
-
     GeoCoord startCoord, endCoord;
     if (!m_am.getGeoCoord(start, startCoord))
         return NAV_BAD_SOURCE;
@@ -180,7 +177,6 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
     
     sScore.associate(startCoord, 0);
     eScore.associate(startCoord, distanceEarthMiles(startCoord, endCoord));
-    /*isEvaluated.associate(startCoord, true);*/
     wl.insert(CoordScore(startCoord, 0));
     
     while (!wl.empty())
@@ -194,8 +190,6 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
             // Build the route when arriving at destination
             if (!buildRoute(curCoord, prevCoord, directions))
                 return NAV_NO_ROUTE;
-            chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
-            cout << "Time to find route: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms" << endl;
             return NAV_SUCCESS;
         }
         
