@@ -462,9 +462,7 @@ bool Ant::canExecute(std::string op) // Returns true if the if statement evaluat
             for (int i = 0; i < 3; i++)
             {
                 if (getWorld()->hasActorType(getX(), getY(), enemyTypes[i], UNSPECIFIED, getFaction()))
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -493,9 +491,7 @@ bool Ant::canExecute(std::string op) // Returns true if the if statement evaluat
             for (int i = 0; i < 4; i++)
             {
                 if (getWorld()->hasActorType(newX, newY, dangerTypes[i], UNSPECIFIED, getFaction()))
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -509,27 +505,3 @@ bool Ant::canExecute(std::string op) // Returns true if the if statement evaluat
     
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

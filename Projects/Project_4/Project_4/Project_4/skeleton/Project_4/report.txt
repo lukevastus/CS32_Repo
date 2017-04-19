@@ -1,0 +1,33 @@
+Runjia Li, 204597009
+Project 4 report
+
+
+MyMap::associate()
+This method performs binary search to insert the node/change the value of node. Its complexity is O(N) where N is the total number of nodes (associations) in the map.
+
+MyMap::find()
+This method also performs binary search. Its complexity is O(N) where N is the total number of nodes in the map.
+
+AttractionMapper::init()
+It traverses all items in the MapLoader’s vector which stores all streets. For each street, it traverses the vector holding all attractions and then uses MyMap::associate() to insert all attractions into a map. 
+Let there be N streets and each street has an average of S attractions. The complexity would be O(NSlog(NS)).
+However, if it is known that there are A total attractions, the complexity for this method is O(N + AlogA). 
+
+AttractionMapper::getGeoCoord()
+It calls MyMap::find() to get the GeoCoord of an attraction. Let there be A attractions in the map, the complexity for this method is O(logA).
+
+SegmentMapper::init()
+It traverses all streets and all attractions (i.e. all GeoCoordinates) and inserts all of them into a map using MyMap::associate(). 
+Let there be N streets and each street has an average of S attractions. The complexity would be O(NSlog(NS)).
+However, given that there are A attractions in total, the complexity is O((N+A)log(N+A)).
+
+SegmentMapper::getSegments()
+It use MyMap::find() to get a vector of pointers to streets associated to a certain GeoCoord and copy all streets they point to to a new vector. 
+Let there a total of U GeoCoords in the map, and each GeoCoord is on average associated to T streets, the complexity would be O(log(U) + T).
+However, given that there are N streets and A total attractions, and practically T is very small compared to N and A, the complexity is O(log(N+A)).
+
+Navigator::navigate()
+It uses A* algorithm which uses a priority queue to hold the coordinates it tries to visit. 
+Let there be N streets, A total attractions, each GeoCoord has an average of T associated streets, the complexity would be O((N+A)(Tlog(N+A)) + (N+A)T^2).
+However, practically T is very small compared to N and A, so the complexity is O((N+A)log(N+A)).
+

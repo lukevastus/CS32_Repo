@@ -112,9 +112,7 @@ void StudentWorld::cleanUp() // Removes all dynamicly allocated memory after the
     for (int i = 0; i < m_playerNum; i++)
     {
         if (m_compilers[i] != nullptr)
-        {
             delete m_compilers[i];
-        }
     }
     
     m_clean = true;
@@ -224,9 +222,7 @@ void StudentWorld::damageAOE(int x, int y, int damage) // Damages all vulnerable
     for (int i = 0; i < m_actors[x][y].size(); i++)
     {
         if ((m_actors[x][y][i]->getType() == BABY_GH || m_actors[x][y][i]->getType() == ANT) && !m_actors[x][y][i]->isDead())
-        {
             m_actors[x][y][i]->loseHP(damage);
-        }
     }
 }
 
